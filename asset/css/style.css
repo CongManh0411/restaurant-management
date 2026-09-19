@@ -60,7 +60,8 @@ body {
     gap: 10px;
 }
  
-.sidebar-menu button {
+.sidebar-menu .tab {
+    display: block;
     color: #e8d9c5;
     font-family: "Poppins", sans-serif;
     font-weight: 500;
@@ -71,17 +72,19 @@ body {
     border-radius: 10px;
     cursor: pointer;
     text-align: center;
+    text-decoration: none;
+    box-sizing: border-box;
     transition: background 0.2s ease, border-color 0.2s ease, transform 0.15s ease;
 }
- 
-.sidebar-menu button:hover {
+
+.sidebar-menu .tab:hover {
     background: #f5e9d8;
     border-color: #f5e9d8;
     color: #3b2313;
 }
- 
+
 /* Nút đang được chọn — nổi bật bằng nền vàng cà phê + chữ đậm màu nền */
-.sidebar-menu button.active {
+.sidebar-menu .tab.active {
     background: #c99a5b;
     border-color: #c99a5b;
     color: #2a170c;
