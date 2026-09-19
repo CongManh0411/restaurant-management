@@ -28,6 +28,10 @@
                     <p>Thêm, sửa, ẩn món trực tiếp.</p>
                 </div>
  
+                <div class="menu-toolbar">
+                    <input type="text" id="menuSearchInput" class="menu-search-input" placeholder="Tìm món theo tên...">
+                </div>
+
                 <!-- Danh sách món sẽ được đổ vào đây từ dữ liệu thật (database/API) -->
                 <div class="menu-category-list" id="menuCategoryList">
                     <div class="menu-empty-state">
@@ -43,6 +47,7 @@
                 </div>
  
                 <form class="add-item-form">
+                    <input type="hidden" id="editItemId" value="">
                     <div class="form-row">
                         <div class="form-group">
                             <label for="itemCategory">Danh mục</label>

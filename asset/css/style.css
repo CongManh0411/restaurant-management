@@ -156,14 +156,47 @@ body {
     margin: 0 0 28px;
 }
  
-/* ---- Trạng thái chưa có món nào ---- */
-.menu-empty-state {
+/* ---- Thanh công cụ trên danh sách món (ô tìm kiếm) ---- */
+.menu-toolbar {
+    margin-bottom: 20px;
+}
+.menu-search-input {
+    width: 100%;
+    box-sizing: border-box;
+    font-family: "Poppins", sans-serif;
+    font-size: 14px;
+    color: #3b2313;
+    padding: 10px 14px;
+    border: 1px solid #e0d3bd;
+    border-radius: 8px;
+    background: #fff;
+}
+.menu-search-input::placeholder {
+    color: #c4b8a5;
+}
+.menu-search-input:focus {
+    outline: none;
+    border-color: #c99a5b;
+}
+
+/* ---- Trạng thái chưa có món nào / đang tải / lỗi ---- */
+.menu-empty-state,
+.menu-loading {
     text-align: center;
     padding: 60px 20px;
     color: #b3a48f;
     font-size: 14px;
     background: #fff;
     border: 1px dashed #e0d3bd;
+    border-radius: 12px;
+}
+.menu-error-state {
+    text-align: center;
+    padding: 60px 20px;
+    color: #b5573c;
+    font-size: 14px;
+    background: #fbe9e3;
+    border: 1px dashed #e3b3a4;
     border-radius: 12px;
 }
  
@@ -480,4 +513,32 @@ body {
 .btn-logout i {
     font-size: 16px;
     line-height: 1;
+}
+
+/* ---- Responsive cho các thành phần của trang Menu trên màn hình nhỏ ---- */
+@media (max-width: 640px) {
+    .form-row {
+        flex-direction: column;
+        gap: 0;
+    }
+    .menu-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+    .menu-item-right {
+        width: 100%;
+        justify-content: space-between;
+        flex-wrap: wrap;
+    }
+    .menu-item-actions {
+        flex-wrap: wrap;
+    }
+    .recipe-toolbar {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    .ingredient-row {
+        flex-wrap: wrap;
+    }
 }

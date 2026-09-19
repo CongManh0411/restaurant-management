@@ -121,6 +121,12 @@ tabs.forEach(tab => {
         tab.classList.add('active');
         const targetPanel = document.getElementById('panel-' + tab.dataset.action);
         if (targetPanel) targetPanel.classList.add('active');
+ 
+        // Mỗi lần chuyển sang tab "Thêm món" đều về chế độ thêm mới mặc định;
+        // openEditItemForm() sẽ tự đổ lại dữ liệu sửa ngay sau lệnh click này.
+        if (tab.dataset.action === 'add' && typeof resetAddFormToAddMode === 'function') {
+            resetAddFormToAddMode();
+        }
     });
 });
  
@@ -135,8 +141,45 @@ tabs.forEach(tab => {
 //    phần render/UI phía dưới.
 // ============================================================
  
-// Dữ liệu demo (khi có backend thì xoá 2 biến sampleMenuData/sampleRecipes này đi)
-const sampleMenuData = [
+// ---- LƯU DỮ LIỆU DEMO VÀO localStorage ----
+// Vì các trang chuyển bằng <a href> (load lại trang thật), biến JS thường sẽ
+// mất dữ liệu khi rời trang Menu. 3 hàm dưới đây giúp dữ liệu demo (món đã
+// thêm/sửa/xoá, công thức đã lưu) được giữ lại khi quay lại trang Menu.
+// Khi có backend thật, phần này không còn cần thiết nữa — có thể xoá cả khối.
+const MENU_STORAGE_KEY = 'coffee_menu_data_v1';
+const RECIPE_STORAGE_KEY = 'coffee_menu_recipes_v1';
+const NEXT_ID_STORAGE_KEY = 'coffee_menu_next_id_v1';
+ 
+function loadFromStorage(key, fallback) {
+    try {
+        const raw = localStorage.getItem(key);
+        return raw ? JSON.parse(raw) : fallback;
+    } catch (err) {
+        console.error(`Không đọc được dữ liệu demo (${key}):`, err);
+        return fallback;
+    }
+}
+ 
+function saveToStorage(key, value) {
+    try {
+        localStorage.setItem(key, JSON.stringify(value));
+    } catch (err) {
+        console.error(`Không lưu được dữ liệu demo (${key}):`, err);
+    }
+}
+ 
+function persistMenuData() {
+    saveToStorage(MENU_STORAGE_KEY, sampleMenuData);
+    saveToStorage(NEXT_ID_STORAGE_KEY, sampleNextId);
+}
+ 
+function persistRecipes() {
+    saveToStorage(RECIPE_STORAGE_KEY, sampleRecipes);
+}
+ 
+// Dữ liệu demo mặc định — chỉ dùng lần đầu tiên (khi localStorage còn trống).
+// Khi có backend thì xoá cả defaultMenuData lẫn 3 biến sampleMenuData/sampleNextId/sampleRecipes.
+const defaultMenuData = [
     {
         category: "Cà phê",
         items: [
@@ -159,8 +202,10 @@ const sampleMenuData = [
         ]
     },
 ];
-let sampleNextId = 7; // dùng để demo tạo id mới khi Thêm món (không cần khi có backend, server sẽ tự sinh id)
-const sampleRecipes = {}; // { [itemId]: [{ name, qty, unit }, ...] } — kho công thức demo
+ 
+const sampleMenuData = loadFromStorage(MENU_STORAGE_KEY, defaultMenuData);
+let sampleNextId = loadFromStorage(NEXT_ID_STORAGE_KEY, 7); // dùng để demo tạo id mới khi Thêm món (không cần khi có backend, server sẽ tự sinh id)
+const sampleRecipes = loadFromStorage(RECIPE_STORAGE_KEY, {}); // { [itemId]: [{ name, qty, unit }, ...] } — kho công thức demo
  
 const MenuAPI = {
     // Lấy toàn bộ danh mục + món
@@ -191,6 +236,7 @@ const MenuAPI = {
             sampleMenuData.push(categoryObj);
         }
         categoryObj.items.push(newItem);
+        persistMenuData();
         return newItem;
  
         // ---- BẢN BACKEND ----
@@ -203,6 +249,52 @@ const MenuAPI = {
         // return await res.json();
     },
  
+    // Sửa món đã có. id = id món cần sửa, payload = { category, newCategory, name, price }
+    async updateItem(id, payload) {
+        // ---- BẢN DEMO ----
+        let target = null;
+        let oldCategoryObj = null;
+        sampleMenuData.forEach(cat => {
+            const found = cat.items.find(it => String(it.id) === String(id));
+            if (found) {
+                target = found;
+                oldCategoryObj = cat;
+            }
+        });
+        if (!target) throw new Error('Không tìm thấy món để sửa');
+ 
+        target.name = payload.name;
+        target.price = Number(payload.price) || 0;
+ 
+        // Nếu người dùng đổi sang danh mục khác (hoặc gõ danh mục mới) thì chuyển món sang danh mục đó
+        const categoryName = payload.newCategory || payload.category;
+        if (categoryName && oldCategoryObj && categoryName !== oldCategoryObj.category) {
+            oldCategoryObj.items = oldCategoryObj.items.filter(it => it !== target);
+            let newCategoryObj = sampleMenuData.find(c => c.category === categoryName);
+            if (!newCategoryObj) {
+                newCategoryObj = { category: categoryName, items: [] };
+                sampleMenuData.push(newCategoryObj);
+            }
+            newCategoryObj.items.push(target);
+            // Xoá danh mục cũ nếu không còn món nào
+            for (let i = sampleMenuData.length - 1; i >= 0; i--) {
+                if (sampleMenuData[i].items.length === 0) sampleMenuData.splice(i, 1);
+            }
+        }
+ 
+        persistMenuData();
+        return target;
+ 
+        // ---- BẢN BACKEND ----
+        // const res = await fetch(`/api/menu/${id}`, {
+        //     method: 'PUT',
+        //     headers: { 'Content-Type': 'application/json' },
+        //     body: JSON.stringify(payload),
+        // });
+        // if (!res.ok) throw new Error('Không sửa được món');
+        // return await res.json();
+    },
+ 
     // Xoá món theo id
     async deleteItem(id) {
         // ---- BẢN DEMO ----
@@ -210,6 +302,8 @@ const MenuAPI = {
             cat.items = cat.items.filter(it => String(it.id) !== String(id));
         });
         delete sampleRecipes[id];
+        persistMenuData();
+        persistRecipes();
         return true;
  
         // ---- BẢN BACKEND ----
@@ -227,6 +321,7 @@ const MenuAPI = {
             if (found) target = found;
         });
         if (target) target.hidden = !target.hidden;
+        persistMenuData();
         return target;
  
         // ---- BẢN BACKEND ----
@@ -257,6 +352,8 @@ const MenuAPI = {
         });
         const hasData = rows.length > 0 && rows.every(r => r.name && r.qty && r.unit);
         if (target) target.hasRecipe = hasData;
+        persistRecipes();
+        persistMenuData();
         return true;
  
         // ---- BẢN BACKEND ----
@@ -331,6 +428,7 @@ function createMenuItemEl(item) {
  
     const actionsEl = document.createElement('div');
     actionsEl.className = 'menu-item-actions';
+    actionsEl.appendChild(createActionButton('btn-outline', 'edit', item.id, 'Sửa'));
     actionsEl.appendChild(createActionButton('btn-outline', 'ingredient', item.id, 'Định mức'));
     actionsEl.appendChild(createActionButton('btn-outline', 'hide', item.id, item.hidden ? 'Hiện' : 'Ẩn'));
     actionsEl.appendChild(createActionButton('btn-danger', 'delete', item.id, 'Xóa'));
@@ -382,10 +480,29 @@ function renderMenu(data) {
  
 // Tải lại menu từ MenuAPI và render lại cả tab Sửa món + dropdown tab Định mức
 async function reloadMenu() {
-    currentMenuData = await MenuAPI.getMenu();
-    renderMenu(currentMenuData);
-    populateCategorySelect();
-    await refreshRecipeItemOptions();
+    const container = document.getElementById('menuCategoryList');
+    if (!container) return; // trang này không có bảng menu (không phải Menu.html)
+ 
+    // Hiện trạng thái "đang tải" thay vì để trống trong lúc chờ dữ liệu
+    container.innerHTML = '';
+    const loadingEl = document.createElement('div');
+    loadingEl.className = 'menu-loading';
+    loadingEl.textContent = 'Đang tải menu...';
+    container.appendChild(loadingEl);
+ 
+    try {
+        currentMenuData = await MenuAPI.getMenu();
+        renderMenu(currentMenuData);
+        populateCategorySelect();
+        await refreshRecipeItemOptions();
+    } catch (err) {
+        console.error('Không tải được menu:', err);
+        container.innerHTML = '';
+        const errorEl = document.createElement('div');
+        errorEl.className = 'menu-error-state';
+        errorEl.textContent = 'Không tải được menu. Vui lòng tải lại trang.';
+        container.appendChild(errorEl);
+    }
 }
  
 function attachMenuItemEvents() {
@@ -404,6 +521,8 @@ function attachMenuItemEvents() {
             } else if (action === 'ingredient') {
                 document.querySelector('.topnav-item[data-action="ingredients"]').click();
                 await selectRecipeItem(id);
+            } else if (action === 'edit') {
+                openEditItemForm(id);
             }
         });
     });
@@ -425,10 +544,43 @@ function populateCategorySelect() {
         categories.map(c => `<option value="${c}">${c}</option>`).join('');
 }
  
+// Đưa form về chế độ "Thêm món" mặc định (xoá id đang sửa, đổi lại tiêu đề/nút)
+function resetAddFormToAddMode() {
+    if (!addItemFormEl) return;
+    addItemFormEl.reset();
+    const editIdInput = document.getElementById('editItemId');
+    if (editIdInput) editIdInput.value = '';
+    const headerH2 = document.querySelector('#panel-add .menu-page-header h2');
+    if (headerH2) headerH2.textContent = 'Thêm món mới';
+    const submitBtn = addItemFormEl.querySelector('.btn-submit');
+    if (submitBtn) submitBtn.textContent = 'Thêm món + danh mục (nếu có)';
+}
+ 
+// Mở tab "Thêm món" ở chế độ Sửa, đổ sẵn dữ liệu món đang chọn vào form
+function openEditItemForm(id) {
+    if (!addItemFormEl) return;
+    const item = getFlatMenuItems().find(it => String(it.id) === String(id));
+    if (!item) return;
+ 
+    document.querySelector('.topnav-item[data-action="add"]').click(); // sẽ tự gọi resetAddFormToAddMode()
+ 
+    const editIdInput = document.getElementById('editItemId');
+    if (editIdInput) editIdInput.value = item.id;
+    if (itemCategorySelectEl) itemCategorySelectEl.value = item.category;
+    document.getElementById('itemPrice').value = item.price;
+    document.getElementById('itemName').value = item.name;
+ 
+    const headerH2 = document.querySelector('#panel-add .menu-page-header h2');
+    if (headerH2) headerH2.textContent = 'Sửa món';
+    const submitBtn = addItemFormEl.querySelector('.btn-submit');
+    if (submitBtn) submitBtn.textContent = 'Lưu thay đổi';
+}
+ 
 if (addItemFormEl) {
     addItemFormEl.addEventListener('submit', async (e) => {
         e.preventDefault();
  
+        const editId = document.getElementById('editItemId') ? document.getElementById('editItemId').value : '';
         const category = itemCategorySelectEl.value;
         const newCategory = document.getElementById('newCategory').value.trim();
         const price = document.getElementById('itemPrice').value;
@@ -439,10 +591,19 @@ if (addItemFormEl) {
             return;
         }
  
-        await MenuAPI.addItem({ category, newCategory, name, price });
-        addItemFormEl.reset();
-        await reloadMenu();
-        document.querySelector('.topnav-item[data-action="edit"]').click();
+        try {
+            if (editId) {
+                await MenuAPI.updateItem(editId, { category, newCategory, name, price });
+            } else {
+                await MenuAPI.addItem({ category, newCategory, name, price });
+            }
+            resetAddFormToAddMode();
+            await reloadMenu();
+            document.querySelector('.topnav-item[data-action="edit"]').click();
+        } catch (err) {
+            console.error('Không lưu được món:', err);
+            alert('Có lỗi xảy ra, không lưu được món. Vui lòng thử lại.');
+        }
     });
 }
  
@@ -605,7 +766,35 @@ async function saveRecipe(itemId) {
 }
  
 // ============================================================
-// 7) KHỞI ĐỘNG TRANG
+// 8) TÌM KIẾM MÓN (tab "Sửa món")
+// ============================================================
+ 
+// Lọc dữ liệu menu theo tên món (không phân biệt hoa/thường), giữ nguyên cấu trúc danh mục
+function filterMenuData(data, keyword) {
+    if (!keyword) return data;
+    const lowerKeyword = keyword.trim().toLowerCase();
+    if (!lowerKeyword) return data;
+    return data
+        .map(cat => ({
+            category: cat.category,
+            items: cat.items.filter(it => it.name.toLowerCase().includes(lowerKeyword)),
+        }))
+        .filter(cat => cat.items.length > 0);
+}
+ 
+function initMenuSearch() {
+    const searchInput = document.getElementById('menuSearchInput');
+    if (!searchInput) return; // trang này không có ô tìm kiếm (không phải Menu.html)
+ 
+    searchInput.addEventListener('input', () => {
+        const filtered = filterMenuData(currentMenuData, searchInput.value);
+        renderMenu(filtered);
+    });
+}
+ 
+// ============================================================
+// 9) KHỞI ĐỘNG TRANG
 // ============================================================
 initIngredientsPanel();
+initMenuSearch();
 reloadMenu();
