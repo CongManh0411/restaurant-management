@@ -73,8 +73,24 @@
             <!-- ============ PANEL: Định mức nguyên liệu ============ -->
             <div class="tab-panel" id="panel-ingredients">
                 <div class="menu-page-header">
-                    <h2>Định mức nguyên liệu</h2>
-                    <p>Chọn 1 món ở tab "Sửa món" để khai báo định mức.</p>
+                    <h2>Định mức nguyên liệu cho món</h2>
+                </div>
+
+                <div class="recipe-card">
+                    <div class="recipe-toolbar">
+                        <select id="recipeItemSelect" class="recipe-select">
+                            <!-- options đổ vào từ sampleMenuData -->
+                        </select>
+                        <button type="button" class="btn-outline" id="btnAddIngredient">+ Nguyên liệu</button>
+                    </div>
+
+                    <div class="ingredient-list" id="ingredientList">
+                        <div class="ingredient-empty">Chưa có nguyên liệu nào cho món này.</div>
+                    </div>
+
+                    <div class="recipe-status" id="recipeStatus">Chưa định mức</div>
+
+                    <button type="button" class="btn-submit" id="btnSaveRecipe">Lưu công thức món</button>
                 </div>
             </div>
         </div>

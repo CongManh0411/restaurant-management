@@ -11,13 +11,14 @@ body {
 .sidebar {
     width: 240px;
     height: 100vh;
-    overflow-y: auto;
+    overflow: hidden; /* không cuộn — mọi khoảng cách bên dưới tự co theo chiều cao màn hình */
     background: linear-gradient(180deg, #4a2a18 0%, #351d10 100%);
-    padding: 28px 18px;
+    padding: clamp(14px, 4vh, 28px) 18px;
     display: flex;
     flex-direction: column;
-    gap: 22px;
+    gap: clamp(10px, 2.2vh, 22px);
     font-family: "Poppins", sans-serif;
+    box-sizing: border-box;
 }
  
 /* ---- Logo ---- */
@@ -27,8 +28,8 @@ body {
     margin-bottom: 4px;
 }
 .shop-logo {
-    width: 110px;
-    height: 110px;
+    width: clamp(64px, 13vh, 110px);
+    height: clamp(64px, 13vh, 110px);
     border-radius: 50%;
     object-fit: cover;
     border: 3px solid #c99a5b;
@@ -63,7 +64,7 @@ body {
 .sidebar-menu {
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: clamp(6px, 1.4vh, 10px);
 }
  
 .sidebar-menu .tab {
@@ -72,7 +73,7 @@ body {
     font-family: "Poppins", sans-serif;
     font-weight: 500;
     font-size: 14px;
-    padding: 12px 16px;
+    padding: clamp(8px, 1.6vh, 12px) 16px;
     background: rgba(255, 255, 255, 0.04);
     border: 1px solid rgba(201, 154, 91, 0.25);
     border-radius: 10px;
@@ -344,4 +345,139 @@ body {
 }
 .btn-submit:hover {
     background: #4a2a18;
+}
+
+/* ---- Định mức nguyên liệu ---- */
+.recipe-card {
+    max-width: 640px;
+}
+
+.recipe-toolbar {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    margin-bottom: 18px;
+}
+
+.recipe-select {
+    flex: 1;
+    box-sizing: border-box;
+    font-family: "Poppins", sans-serif;
+    font-size: 14px;
+    color: #3b2313;
+    padding: 10px 12px;
+    border: 1px solid #e0d3bd;
+    border-radius: 8px;
+    background: #fff;
+}
+.recipe-select:focus {
+    outline: none;
+    border-color: #c99a5b;
+}
+
+.recipe-toolbar .btn-outline {
+    white-space: nowrap;
+}
+
+.ingredient-list {
+    border: 1px solid #e0d3bd;
+    border-radius: 8px;
+    min-height: 90px;
+    padding: 16px;
+    margin-bottom: 16px;
+    background: #fff;
+}
+
+.ingredient-empty {
+    color: #b3a48f;
+    font-size: 14px;
+}
+
+.ingredient-row {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    padding: 8px 0;
+    border-bottom: 1px solid #ece2d3;
+}
+.ingredient-row:last-child {
+    border-bottom: none;
+}
+
+.ingredient-row input {
+    box-sizing: border-box;
+    font-family: "Poppins", sans-serif;
+    font-size: 13px;
+    color: #3b2313;
+    padding: 8px 10px;
+    border: 1px solid #e0d3bd;
+    border-radius: 6px;
+    background: #fff;
+}
+.ingredient-row input:focus {
+    outline: none;
+    border-color: #c99a5b;
+}
+
+.ingredient-row .ing-name { flex: 2; }
+.ingredient-row .ing-qty { flex: 1; }
+.ingredient-row .ing-unit { flex: 1; }
+
+.ingredient-row .btn-remove {
+    background: none;
+    border: none;
+    color: #b5573c;
+    cursor: pointer;
+    font-size: 18px;
+    line-height: 1;
+    padding: 4px 6px;
+}
+.ingredient-row .btn-remove:hover {
+    color: #c96a5b;
+}
+
+.recipe-status {
+    font-size: 13px;
+    font-weight: 600;
+    color: #b5573c;
+    margin-bottom: 16px;
+}
+.recipe-status.done {
+    color: #4a8f5b;
+}
+
+/* ---- Đăng xuất (đáy sidebar) ---- */
+.sidebar-footer {
+    margin-top: auto; /* bám đáy sidebar khi còn khoảng trống thừa */
+    flex-shrink: 0;
+    padding-top: clamp(8px, 1.6vh, 16px);
+    border-top: 1px solid rgba(201, 154, 91, 0.25);
+}
+
+.btn-logout {
+    width: 100%;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-family: "Poppins", sans-serif;
+    font-weight: 500;
+    font-size: 14px;
+    color: #f0b8ab;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(197, 90, 74, 0.35);
+    border-radius: 10px;
+    padding: 12px 16px;
+    cursor: pointer;
+    transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+}
+.btn-logout:hover {
+    background: #c96a5b;
+    border-color: #c96a5b;
+    color: #fff;
+}
+.btn-logout i {
+    font-size: 16px;
+    line-height: 1;
 }
