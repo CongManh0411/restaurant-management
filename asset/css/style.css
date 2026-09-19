@@ -1,11 +1,17 @@
-body {
+html, body {
+    height: 100%;
     margin: 0;
+    overflow: hidden;
+}
+
+body {
     display: flex;
 }
  
 .sidebar {
     width: 240px;
-    min-height: 100vh;
+    height: 100vh;
+    overflow-y: auto;
     background: linear-gradient(180deg, #4a2a18 0%, #351d10 100%);
     padding: 28px 18px;
     display: flex;
@@ -95,7 +101,8 @@ body {
 .main {
     flex: 1;
     background: #f7f2ea;
-    min-height: 100vh;
+    height: 100vh;
+    overflow-y: auto;
 }
  
 /* Thanh điều hướng ngang */
