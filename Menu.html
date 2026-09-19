@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="asset/css/style.css">
+    <title>Menu</title>
+</head>
+<body data-page="menu">
+    <div id="sidebar-container"></div>
+    <!-- Nội dung chính -->
+    <main class="main">
+        <!-- Thanh điều hướng ngang — các thao tác trong trang Menu -->
+        <nav class="topnav">
+            <button class="topnav-item active" data-action="edit">Sửa món</button>
+            <button class="topnav-item" data-action="add">Thêm món</button>
+            <button class="topnav-item" data-action="ingredients">Định mức nguyên liệu</button>
+        </nav>
+ 
+        <div class="main-content">
+            <!-- ============ PANEL: Sửa món ============ -->
+            <div class="tab-panel active" id="panel-edit">
+                <div class="menu-page-header">
+                    <h2>Menu</h2>
+                    <p>Thêm, sửa, ẩn món trực tiếp.</p>
+                </div>
+ 
+                <!-- Danh sách món sẽ được đổ vào đây từ dữ liệu thật (database/API) -->
+                <div class="menu-category-list" id="menuCategoryList">
+                    <div class="menu-empty-state">
+                        Chưa có món nào. Vào tab "Thêm món" để bắt đầu.
+                    </div>
+                </div>
+            </div>
+ 
+            <!-- ============ PANEL: Thêm món ============ -->
+            <div class="tab-panel" id="panel-add">
+                <div class="menu-page-header">
+                    <h2>Thêm món mới</h2>
+                </div>
+ 
+                <form class="add-item-form">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="itemCategory">Danh mục</label>
+                            <select id="itemCategory">
+                                <option value="">-- Chọn danh mục --</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="newCategory">Hoặc tạo danh mục mới</label>
+                            <input type="text" id="newCategory" placeholder="Ví dụ: Trà trái cây">
+                        </div>
+                    </div>
+ 
+                    <div class="form-group">
+                        <label for="itemPrice">Giá (đ)</label>
+                        <input type="number" id="itemPrice" placeholder="Ví dụ: 35000">
+                    </div>
+ 
+                    <div class="form-group">
+                        <label for="itemName">Tên món</label>
+                        <input type="text" id="itemName" placeholder="Ví dụ: Trà đào cam sả">
+                    </div>
+ 
+                    <button type="submit" class="btn-submit">Thêm món + danh mục (nếu có)</button>
+                </form>
+            </div>
+ 
+            <!-- ============ PANEL: Định mức nguyên liệu ============ -->
+            <div class="tab-panel" id="panel-ingredients">
+                <div class="menu-page-header">
+                    <h2>Định mức nguyên liệu</h2>
+                    <p>Chọn 1 món ở tab "Sửa món" để khai báo định mức.</p>
+                </div>
+            </div>
+        </div>
+    </main>
+ 
+    <script src="asset/css/js/script.js"></script>
+</body>
+</html>
