@@ -63,6 +63,66 @@ fetch('sidebar.html')
     })
     .catch(err => console.error('Không tải được sidebar.html:', err));
  
+// ============================================================
+// 1b) MOBILE: thanh topbar (nút ☰) + sidebar dạng drawer
+//     Chạy trên mọi trang, không phụ thuộc sidebar đã tải xong hay
+//     chưa — vì nút bấm chỉ tìm sidebar (.sidebar) tại thời điểm click.
+// ============================================================
+function initMobileNav() {
+    const main = document.querySelector('.main');
+    if (!main || document.querySelector('.mobile-topbar')) return; // trang không có .main, hoặc đã khởi tạo rồi
+ 
+    // Thanh topbar: nút mở menu + tên trang (lấy từ <title>)
+    const topbar = document.createElement('div');
+    topbar.className = 'mobile-topbar';
+    topbar.innerHTML = `
+        <button type="button" class="sidebar-toggle-btn" id="sidebarToggleBtn" aria-label="Mở menu">
+            <i class="ri-menu-line"></i>
+        </button>
+        <span class="mobile-topbar-title">${document.title}</span>
+    `;
+    main.prepend(topbar);
+ 
+    // Lớp phủ tối, bấm vào để đóng sidebar
+    const overlay = document.createElement('div');
+    overlay.className = 'sidebar-overlay';
+    overlay.id = 'sidebarOverlay';
+    document.body.appendChild(overlay);
+ 
+    const openSidebar = () => {
+        const sidebar = document.querySelector('.sidebar');
+        if (sidebar) sidebar.classList.add('open');
+        overlay.classList.add('active');
+    };
+ 
+    const closeSidebar = () => {
+        const sidebar = document.querySelector('.sidebar');
+        if (sidebar) sidebar.classList.remove('open');
+        overlay.classList.remove('active');
+    };
+ 
+    document.getElementById('sidebarToggleBtn').addEventListener('click', () => {
+        const sidebar = document.querySelector('.sidebar');
+        const isOpen = sidebar && sidebar.classList.contains('open');
+        if (isOpen) closeSidebar(); else openSidebar();
+    });
+ 
+    overlay.addEventListener('click', closeSidebar);
+ 
+    // Bấm chọn 1 mục trong sidebar (Bàn/Menu/Doanh thu...) thì tự đóng drawer lại
+    document.addEventListener('click', (e) => {
+        if (e.target.closest('.sidebar-menu .tab')) closeSidebar();
+    });
+ 
+    // Xoay ngang <-> dọc hoặc resize cửa sổ qua breakpoint desktop: đảm bảo
+    // sidebar/overlay không bị kẹt ở trạng thái "đang mở" khi quay lại màn lớn
+    window.addEventListener('resize', () => {
+        if (window.innerWidth > 768) closeSidebar();
+    });
+}
+ 
+initMobileNav();
+ 
 function initSidebarNav() {
     const sidebarTabs = document.querySelectorAll('.sidebar-menu .tab');
     // Body mỗi trang phải có data-page="xxx" khớp với data-view="xxx" tương ứng
@@ -511,18 +571,35 @@ function attachMenuItemEvents() {
             const action = btn.dataset.action;
             const id = btn.dataset.id;
  
-            if (action === 'delete') {
-                if (!confirm('Xoá món này?')) return;
-                await MenuAPI.deleteItem(id);
-                await reloadMenu();
-            } else if (action === 'hide') {
-                await MenuAPI.toggleHideItem(id);
-                await reloadMenu();
-            } else if (action === 'ingredient') {
+            // "edit" và "ingredient" chỉ chuyển tab/đổ dữ liệu, không gọi API nên không cần khoá nút
+            if (action === 'ingredient') {
                 document.querySelector('.topnav-item[data-action="ingredients"]').click();
                 await selectRecipeItem(id);
-            } else if (action === 'edit') {
+                return;
+            }
+            if (action === 'edit') {
                 openEditItemForm(id);
+                return;
+            }
+ 
+            if (action === 'delete' && !confirm('Xoá món này?')) return;
+ 
+            // Khoá toàn bộ nút thao tác trong dòng món này để tránh bấm trùng khi đang chờ API
+            const rowEl = btn.closest('.menu-item');
+            const rowButtons = rowEl ? rowEl.querySelectorAll('button[data-action]') : [btn];
+            rowButtons.forEach(b => (b.disabled = true));
+ 
+            try {
+                if (action === 'delete') {
+                    await MenuAPI.deleteItem(id);
+                } else if (action === 'hide') {
+                    await MenuAPI.toggleHideItem(id);
+                }
+                await reloadMenu();
+            } catch (err) {
+                console.error('Không thực hiện được thao tác:', err);
+                alert('Có lỗi xảy ra. Vui lòng thử lại.');
+                rowButtons.forEach(b => (b.disabled = false));
             }
         });
     });
@@ -554,6 +631,8 @@ function resetAddFormToAddMode() {
     if (headerH2) headerH2.textContent = 'Thêm món mới';
     const submitBtn = addItemFormEl.querySelector('.btn-submit');
     if (submitBtn) submitBtn.textContent = 'Thêm món + danh mục (nếu có)';
+    const cancelBtn = document.getElementById('btnCancelEdit');
+    if (cancelBtn) cancelBtn.style.display = 'none';
 }
  
 // Mở tab "Thêm món" ở chế độ Sửa, đổ sẵn dữ liệu món đang chọn vào form
@@ -574,6 +653,62 @@ function openEditItemForm(id) {
     if (headerH2) headerH2.textContent = 'Sửa món';
     const submitBtn = addItemFormEl.querySelector('.btn-submit');
     if (submitBtn) submitBtn.textContent = 'Lưu thay đổi';
+    const cancelBtn = document.getElementById('btnCancelEdit');
+    if (cancelBtn) cancelBtn.style.display = 'block';
+}
+ 
+// Kiểm tra dữ liệu form Thêm/Sửa món trước khi gửi.
+// Trả về { valid, message, cleanCategory, cleanPrice } — message rỗng nghĩa là hợp lệ.
+function validateItemForm({ category, newCategory, price, name, editId }) {
+    const cleanName = name.trim();
+    const cleanNewCategory = newCategory.trim();
+    const cleanPrice = Number(price);
+ 
+    if (!cleanName) {
+        return { valid: false, message: 'Vui lòng nhập tên món.' };
+    }
+    if (!category && !cleanNewCategory) {
+        return { valid: false, message: 'Vui lòng chọn hoặc tạo một danh mục.' };
+    }
+    if (price === '' || Number.isNaN(cleanPrice)) {
+        return { valid: false, message: 'Giá món phải là một số.' };
+    }
+    if (cleanPrice <= 0) {
+        return { valid: false, message: 'Giá món phải lớn hơn 0.' };
+    }
+ 
+    // Chuẩn hoá tên danh mục mới (bỏ khoảng trắng thừa) để tránh tạo trùng danh mục
+    // chỉ khác nhau ở khoảng trắng/hoa-thường, ví dụ "Bánh" và " bánh ".
+    let finalCategory = category;
+    let finalNewCategory = '';
+    if (cleanNewCategory) {
+        const existing = currentMenuData.find(
+            c => c.category.trim().toLowerCase() === cleanNewCategory.toLowerCase()
+        );
+        finalNewCategory = existing ? '' : cleanNewCategory;
+        finalCategory = existing ? existing.category : '';
+    }
+ 
+    // Không cho trùng tên món trong cùng một danh mục (không tính chính món đang sửa)
+    const targetCategoryName = finalNewCategory || finalCategory;
+    const categoryObj = currentMenuData.find(c => c.category === targetCategoryName);
+    if (categoryObj) {
+        const duplicate = categoryObj.items.find(
+            it => it.name.trim().toLowerCase() === cleanName.toLowerCase() && String(it.id) !== String(editId)
+        );
+        if (duplicate) {
+            return { valid: false, message: `Món "${cleanName}" đã tồn tại trong danh mục "${targetCategoryName}".` };
+        }
+    }
+ 
+    return {
+        valid: true,
+        message: '',
+        cleanCategory: finalCategory,
+        cleanNewCategory: finalNewCategory,
+        cleanPrice,
+        cleanName,
+    };
 }
  
 if (addItemFormEl) {
@@ -582,20 +717,34 @@ if (addItemFormEl) {
  
         const editId = document.getElementById('editItemId') ? document.getElementById('editItemId').value : '';
         const category = itemCategorySelectEl.value;
-        const newCategory = document.getElementById('newCategory').value.trim();
+        const newCategory = document.getElementById('newCategory').value;
         const price = document.getElementById('itemPrice').value;
-        const name = document.getElementById('itemName').value.trim();
+        const name = document.getElementById('itemName').value;
  
-        if (!name || !price || (!category && !newCategory)) {
-            alert('Vui lòng nhập tên món, giá và chọn (hoặc tạo) danh mục.');
+        const result = validateItemForm({ category, newCategory, price, name, editId });
+        if (!result.valid) {
+            alert(result.message);
             return;
         }
  
+        const submitBtn = addItemFormEl.querySelector('.btn-submit');
+        const originalBtnText = submitBtn ? submitBtn.textContent : '';
+        if (submitBtn) {
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Đang lưu...';
+        }
+ 
         try {
+            const payload = {
+                category: result.cleanCategory,
+                newCategory: result.cleanNewCategory,
+                name: result.cleanName,
+                price: result.cleanPrice,
+            };
             if (editId) {
-                await MenuAPI.updateItem(editId, { category, newCategory, name, price });
+                await MenuAPI.updateItem(editId, payload);
             } else {
-                await MenuAPI.addItem({ category, newCategory, name, price });
+                await MenuAPI.addItem(payload);
             }
             resetAddFormToAddMode();
             await reloadMenu();
@@ -603,7 +752,22 @@ if (addItemFormEl) {
         } catch (err) {
             console.error('Không lưu được món:', err);
             alert('Có lỗi xảy ra, không lưu được món. Vui lòng thử lại.');
+        } finally {
+            if (submitBtn) {
+                submitBtn.disabled = false;
+                // Nếu vẫn còn ở chế độ sửa (do lưu lỗi) thì giữ nguyên nhãn nút cũ
+                submitBtn.textContent = originalBtnText;
+            }
         }
+    });
+}
+ 
+// Nút "Hủy" trong form Thêm/Sửa món — chỉ hiện khi đang ở chế độ Sửa
+const btnCancelEditEl = document.getElementById('btnCancelEdit');
+if (btnCancelEditEl) {
+    btnCancelEditEl.addEventListener('click', () => {
+        resetAddFormToAddMode();
+        document.querySelector('.topnav-item[data-action="edit"]').click();
     });
 }
  
