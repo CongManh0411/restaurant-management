@@ -7,21 +7,581 @@
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="asset/css/style.css">
     <title>Nhân viên</title>
+    
+    <style>
+        /* ==================== Custom Staff Management Styles ==================== */
+        
+        .menu-page-header {
+            margin-bottom: 50px;
+        }
+
+        .menu-page-header h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 42px;
+            font-weight: 700;
+            color: #000;
+            margin-bottom: 8px;
+        }
+
+        .menu-page-header p {
+            font-size: 14px;
+            color: #999;
+            font-weight: 400;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        /* Staff List Section */
+        .staff-list {
+            margin-bottom: 50px;
+        }
+
+        .staff-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            padding: 20px 0;
+            border-bottom: 1px solid #e8e8e8;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .staff-item:last-child {
+            border-bottom: none;
+        }
+
+        .staff-info {
+            flex: 1;
+        }
+
+        .staff-name {
+            font-size: 16px;
+            font-weight: 600;
+            color: #000;
+            margin-bottom: 6px;
+        }
+
+        .staff-username {
+            font-size: 13px;
+            color: #666;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .staff-tasks {
+            font-size: 12px;
+            color: #999;
+            line-height: 1.6;
+        }
+
+        .staff-actions {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 12px;
+        }
+
+        .staff-role {
+            font-size: 14px;
+            font-weight: 600;
+            color: #000;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn-edit, .btn-delete {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            font-family: 'Poppins', sans-serif;
+            transition: all 0.3s ease;
+        }
+
+        .btn-edit {
+            background-color: #f0f0f0;
+            color: #333;
+        }
+
+        .btn-edit:hover {
+            background-color: #e0e0e0;
+        }
+
+        .btn-delete {
+            background-color: #ff6b6b;
+            color: white;
+        }
+
+        .btn-delete:hover {
+            background-color: #ff5252;
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: #999;
+            font-size: 14px;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        /* Divider Section */
+        .section-divider {
+            border-top: 1px solid #e8e8e8;
+            padding-top: 40px;
+            margin-top: 40px;
+            margin-bottom: 40px;
+        }
+
+        .section-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 20px;
+            font-weight: 600;
+            color: #000;
+            margin-bottom: 30px;
+        }
+
+        /* Form Section */
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group label {
+            font-size: 13px;
+            font-weight: 600;
+            color: #000;
+            margin-bottom: 8px;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .form-group input,
+        .form-group select {
+            padding: 12px 14px;
+            border: 1px solid #d0d0d0;
+            border-radius: 4px;
+            font-size: 13px;
+            font-family: 'Poppins', sans-serif;
+            transition: border-color 0.3s ease;
+            background-color: #fafafa;
+        }
+
+        .form-group input::placeholder,
+        .form-group select::placeholder {
+            color: #ccc;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #000;
+            background-color: white;
+        }
+
+        /* Checkboxes Section */
+        .checkboxes-section {
+            margin-bottom: 30px;
+        }
+
+        .checkboxes-title {
+            font-size: 13px;
+            font-weight: 600;
+            color: #000;
+            margin-bottom: 15px;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .checkboxes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+        }
+
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .checkbox-item input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+            accent-color: #000;
+        }
+
+        .checkbox-item label {
+            font-size: 13px;
+            color: #333;
+            cursor: pointer;
+            font-weight: 400;
+            user-select: none;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        /* Submit Button */
+        .btn-submit {
+            width: 100%;
+            padding: 14px;
+            background-color: #000;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            font-family: 'Poppins', sans-serif;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn-submit:hover {
+            background-color: #333;
+        }
+
+        .btn-submit:active {
+            background-color: #000;
+        }
+
+        /* Edit Mode Indicator */
+        .edit-mode-indicator {
+            display: none;
+            background-color: #f9f9f9;
+            padding: 15px;
+            border-radius: 4px;
+            border-left: 3px solid #000;
+            margin-bottom: 20px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 12px;
+            color: #666;
+            font-weight: 500;
+        }
+
+        .edit-mode-indicator.active {
+            display: block;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .menu-page-header h2 {
+                font-size: 32px;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .checkboxes-grid {
+                grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            }
+
+            .staff-item {
+                flex-direction: column;
+            }
+
+            .staff-actions {
+                align-items: flex-start;
+                margin-top: 15px;
+            }
+
+            .staff-role {
+                margin-bottom: 8px;
+            }
+
+            .action-buttons {
+                width: 100%;
+            }
+
+            .btn-edit, .btn-delete {
+                flex: 1;
+            }
+        }
+    </style>
 </head>
 <body data-page="staff">
     <div id="sidebar-container"></div>
  
     <main class="main">
         <div class="main-content">
+            <!-- Page Header -->
             <div class="menu-page-header">
                 <h2>Nhân viên</h2>
-                <p>Noi dung trang Nhân viên se lam sau.</p>
+                <p>Tạo tài khoản, chọn chức vụ và phân công công việc.</p>
             </div>
+
+            <!-- Staff List Section -->
+            <div class="staff-list" id="staffList">
+                <!-- Staff items will be rendered here -->
+            </div>
+
+            <!-- Section Divider -->
+            <div class="section-divider"></div>
+
+            <!-- Form Section Title -->
+            <div class="section-title">Tạo tài khoản nhân viên mới</div>
+
+            <!-- Edit Mode Indicator -->
+            <div id="editModeIndicator" class="edit-mode-indicator">
+                📝 Đang chỉnh sửa thông tin nhân viên
+            </div>
+
+            <!-- Staff Management Form -->
+            <form id="staffForm">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="fullName">Họ tên</label>
+                        <input type="text" id="fullName" placeholder="Nhập họ tên" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="role">Chức vụ</label>
+                        <select id="role" required>
+                            <option value="">-- Chọn chức vụ --</option>
+                            <option value="Quản lý">Quản lý</option>
+                            <option value="Nhân viên order">Nhân viên order</option>
+                            <option value="Thu ngân">Thu ngân</option>
+                            <option value="Phục vụ">Phục vụ</option>
+                            <option value="Bếp">Bếp</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="username">Tài khoản</label>
+                        <input type="text" id="username" placeholder="Nhập tài khoản" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Mật khẩu</label>
+                        <input type="password" id="password" placeholder="Nhập mật khẩu" required>
+                    </div>
+                </div>
+
+                <div class="checkboxes-section">
+                    <div class="checkboxes-title">Công việc được phân công</div>
+                    <div class="checkboxes-grid" id="tasksCheckboxes">
+                        <!-- Checkboxes will be generated here -->
+                    </div>
+                </div>
+
+                <button type="submit" class="btn-submit" id="submitBtn">Tạo tài khoản</button>
+            </form>
         </div>
     </main>
  
     <!-- auth.js PHẢI nạp trước script.js: chặn trang nếu chưa đăng nhập / sai quyền -->
     <script src="asset/js/auth.js"></script>
     <script src="asset/js/common.js"></script>
+    
+    <!-- Staff Management JavaScript -->
+    <script>
+        // ==================== State Management ====================
+        const availableTasks = [
+            'Gọi món',
+            'Phục vụ món',
+            'Theo dõi bàn',
+            'Thanh toán',
+            'Quản lý kho',
+            'Báo cáo doanh số'
+        ];
+
+        let staffList = [
+            {
+                id: 1,
+                fullName: 'Lê Quản Lý',
+                username: 'admin',
+                password: '123456',
+                role: 'Quản lý',
+                assignedTasks: ['Gọi món', 'Thanh toán', 'Báo cáo doanh số']
+            },
+            {
+                id: 2,
+                fullName: 'Nguyễn Thu Ngân',
+                username: 'cashier',
+                password: '123456',
+                role: 'Thu ngân',
+                assignedTasks: ['Thanh toán', 'Báo cáo doanh số']
+            },
+            {
+                id: 3,
+                fullName: 'Trần Nhân Viên Order',
+                username: 'order',
+                password: '123456',
+                role: 'Nhân viên order',
+                assignedTasks: ['Gọi món', 'Phục vụ món']
+            }
+        ];
+
+        let currentEditingId = null;
+        let nextId = 4;
+
+        // ==================== Initialize Page ====================
+        function initStaffManagement() {
+            renderStaffList();
+            renderTasksCheckboxes();
+            attachFormListener();
+        }
+
+        // ==================== Render Functions ====================
+        function renderStaffList() {
+            const staffListContainer = document.getElementById('staffList');
+            
+            if (staffList.length === 0) {
+                staffListContainer.innerHTML = '<div class="empty-state">Chưa có nhân viên nào. Hãy tạo tài khoản nhân viên mới!</div>';
+                return;
+            }
+
+            staffListContainer.innerHTML = staffList.map(staff => `
+                <div class="staff-item">
+                    <div class="staff-info">
+                        <div class="staff-name">${escapeHtml(staff.fullName)}</div>
+                        <div class="staff-username">@${escapeHtml(staff.username)}</div>
+                        <div class="staff-tasks">${staff.assignedTasks.length > 0 ? staff.assignedTasks.join(', ') : 'Không có công việc'}</div>
+                    </div>
+                    <div class="staff-actions">
+                        <div class="staff-role">${escapeHtml(staff.role)}</div>
+                        <div class="action-buttons">
+                            <button type="button" class="btn-edit" onclick="editStaff(${staff.id})">Sửa</button>
+                            <button type="button" class="btn-delete" onclick="deleteStaff(${staff.id})">Xóa</button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function renderTasksCheckboxes() {
+            const tasksContainer = document.getElementById('tasksCheckboxes');
+            tasksContainer.innerHTML = availableTasks.map((task, index) => `
+                <div class="checkbox-item">
+                    <input type="checkbox" id="task-${index}" name="task" value="${task}">
+                    <label for="task-${index}">${task}</label>
+                </div>
+            `).join('');
+        }
+
+        // ==================== Form Handling ====================
+        function attachFormListener() {
+            const form = document.getElementById('staffForm');
+            form.addEventListener('submit', handleFormSubmit);
+        }
+
+        function handleFormSubmit(e) {
+            e.preventDefault();
+
+            const fullName = document.getElementById('fullName').value.trim();
+            const username = document.getElementById('username').value.trim();
+            const password = document.getElementById('password').value.trim();
+            const role = document.getElementById('role').value;
+            const selectedTasks = Array.from(document.querySelectorAll('input[name="task"]:checked'))
+                .map(checkbox => checkbox.value);
+
+            if (!fullName || !username || !password || !role) {
+                alert('Vui lòng điền đầy đủ thông tin!');
+                return;
+            }
+
+            if (currentEditingId !== null) {
+                // Update existing staff
+                const staffIndex = staffList.findIndex(s => s.id === currentEditingId);
+                if (staffIndex !== -1) {
+                    staffList[staffIndex] = {
+                        ...staffList[staffIndex],
+                        fullName,
+                        username,
+                        password,
+                        role,
+                        assignedTasks: selectedTasks
+                    };
+                }
+            } else {
+                // Create new staff
+                const newStaff = {
+                    id: nextId++,
+                    fullName,
+                    username,
+                    password,
+                    role,
+                    assignedTasks: selectedTasks
+                };
+                staffList.push(newStaff);
+            }
+
+            resetForm();
+            renderStaffList();
+        }
+
+        function resetForm() {
+            const form = document.getElementById('staffForm');
+            form.reset();
+            document.querySelectorAll('input[name="task"]').forEach(checkbox => {
+                checkbox.checked = false;
+            });
+            document.getElementById('submitBtn').textContent = 'Tạo tài khoản';
+            document.getElementById('editModeIndicator').classList.remove('active');
+            currentEditingId = null;
+        }
+
+        // ==================== Edit Function ====================
+        function editStaff(id) {
+            const staff = staffList.find(s => s.id === id);
+            if (!staff) return;
+
+            // Populate form with staff data
+            document.getElementById('fullName').value = staff.fullName;
+            document.getElementById('username').value = staff.username;
+            document.getElementById('password').value = staff.password;
+            document.getElementById('role').value = staff.role;
+
+            // Check assigned tasks
+            document.querySelectorAll('input[name="task"]').forEach(checkbox => {
+                checkbox.checked = staff.assignedTasks.includes(checkbox.value);
+            });
+
+            // Change button text and set editing mode
+            document.getElementById('submitBtn').textContent = 'Lưu thay đổi';
+            document.getElementById('editModeIndicator').classList.add('active');
+            currentEditingId = id;
+
+            // Scroll to form
+            document.getElementById('staffForm').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        // ==================== Delete Function ====================
+        function deleteStaff(id) {
+            if (confirm('Bạn có chắc chắn muốn xóa nhân viên này?')) {
+                staffList = staffList.filter(staff => staff.id !== id);
+                
+                // Reset form if editing this staff
+                if (currentEditingId === id) {
+                    resetForm();
+                }
+                
+                renderStaffList();
+            }
+        }
+
+        // ==================== Utility Functions ====================
+        function escapeHtml(text) {
+            const map = {
+                '&': '&amp;',
+                '<': '&lt;',
+                '>': '&gt;',
+                '"': '&quot;',
+                "'": '&#039;'
+            };
+            return text.replace(/[&<>"']/g, m => map[m]);
+        }
+
+        // ==================== Initialize on Page Load ====================
+        document.addEventListener('DOMContentLoaded', initStaffManagement);
+    </script>
 </body>
 </html>

@@ -41,6 +41,7 @@ const PAGES_BY_ROLE = {
         { path: 'Revenue.html', label: 'Doanh thu',  view: 'revenue', id: 'navRevenue' },
         { path: 'History.html', label: 'Lịch sử',    view: 'history', id: 'navHistory' },
         { path: 'Staff.html',   label: 'Nhân viên',  view: 'staff',   id: 'navStaff' },
+        { path: 'warehouse.html',  label: 'Kho',       view: 'warehouse', id: 'navWarehouse' },
     ],
     cashier: [
         // Thu ngân chỉ có đúng 1 mục trong sidebar: Thanh toán.
