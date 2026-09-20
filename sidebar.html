@@ -1,9 +1,10 @@
 <!-- File này chỉ chứa sidebar, sẽ được nạp vào mọi trang bằng JS (xem script.js).
-     Muốn đổi logo, tên, menu... chỉ cần sửa DUY NHẤT file này. -->
+     Muốn đổi logo, tên... chỉ cần sửa DUY NHẤT file này.
+     Riêng các mục menu được script.js vẽ theo vai trò (xem MENU_ITEMS_BY_ROLE trong script.js). -->
 <aside class="sidebar">
     <!-- Logo + tên quán -->
     <div class="sidebar-shop">
-        <img src="asset/images.jpg" alt="Coffee Logo" class="shop-logo" id="shopLogo">
+        <img src="asset/images/images.jpg" alt="Coffee Logo" class="shop-logo" id="shopLogo">
     </div>
  
     <!-- User đang đăng nhập + chức vụ — nội dung "Tên"/"Chức vụ" chỉ là mặc định,
@@ -15,13 +16,7 @@
  
     <div class="sidebar-nav">
         <div class="sidebar-menu">
-            <div class="sidebar-menu">
-                <a href="Table.html" data-view="tables" class="tab">Bàn</a>
-                <a href="Menu.html" data-view="menu" class="tab" id="navMenu">Menu</a>
-                <a href="Revenue.html" data-view="revenue" class="tab" id="navRevenue">Doanh thu</a>
-                <a href="History.html" data-view="history" class="tab" id="navHistory">Lịch sử</a>
-                <a href="Scaff.html" data-view="staff" class="tab" id="navStaff">Nhân viên</a>
-            </div>
+            <div class="sidebar-menu" id="sidebarMenu"></div>
         </div>
     </div>
  
@@ -34,3 +29,22 @@
     </div>
 </aside>
  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

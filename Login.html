@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Đăng nhập</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="asset/css/style.css">
+</head>
+<body class="login-page" data-page="login">
+
+  <main class="login-card">
+    <div class="login-logo" aria-hidden="true">☕</div>
+    <h1 class="login-title">Đăng nhập</h1>
+    <p class="login-sub">Dùng tài khoản do Quản lý cấp</p>
+
+    <form id="loginForm" class="login-form" novalidate>
+      <label class="login-field">
+        <span>Tên đăng nhập</span>
+        <input type="text" id="username" autocomplete="username" required autofocus>
+      </label>
+
+      <label class="login-field">
+        <span>Mật khẩu</span>
+        <div class="login-pass">
+          <input type="password" id="password" autocomplete="current-password" required>
+          <button type="button" id="togglePass" class="login-eye" aria-label="Hiện mật khẩu">Hiện</button>
+        </div>
+      </label>
+
+      <p id="loginError" class="login-error" role="alert" hidden></p>
+
+      <button type="submit" class="login-btn">Đăng nhập</button>
+      <a href="#" class="login-forgot" id="forgotLink">Quên mật khẩu?</a>
+    </form>
+
+    <div class="login-demo">
+      <strong>Tài khoản thử</strong>
+      <ul>
+        <li>quanly / 123456 — Quản lý</li>
+        <li>thungan / 123456 — Thu ngân</li>
+      </ul>
+    </div>
+  </main>
+
+  <footer class="login-copy">© 2026 Quán cà phê. Đã đăng ký bản quyền. <span id="loginVer">(bản 3)</span></footer>
+
+  <!-- auth.js xử lý đăng nhập trên chính trang này (gắn vào #loginForm) -->
+  <script src="asset/js/auth.js"></script>
+  <script src="asset/js/common.js"></script>
+</body>
+</html>

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="vi">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,17 +9,96 @@
     <title>Doanh thu</title>
 </head>
 <body data-page="revenue">
+    <!-- Sidebar sẽ được JS nạp vào đây (xem sidebar.html + script.js) -->
     <div id="sidebar-container"></div>
- 
+
     <main class="main">
+        <nav class="topnav period-filter-bar" id="periodFilterBar" style="padding:16px 24px 0; border-bottom:none;">
+            <button class="topnav-item active" data-period="today">Hôm nay</button>
+            <button class="topnav-item" data-period="week">Tuần này</button>
+            <button class="topnav-item" data-period="month">Tháng này</button>
+            <button class="topnav-item" data-period="quarter">Quý này</button>
+            <button class="topnav-item" data-period="year">Năm nay</button>
+            <button class="topnav-item" data-period="custom">Tùy chọn</button>
+            <span class="date-range-inputs" id="dateRangeInputs">
+                <input type="date" id="dateFrom">
+                <span>—</span>
+                <input type="date" id="dateTo">
+                <button class="btn-outline" id="btnApplyRange">Áp dụng</button>
+            </span>
+        </nav>
+
         <div class="main-content">
             <div class="menu-page-header">
                 <h2>Doanh thu</h2>
-                <p>Noi dung trang Doanh thu se lam sau.</p>
+                <p id="periodLabel">Doanh thu hôm nay</p>
             </div>
+
+            <div class="stats-grid">
+                <div class="stat-card highlight">
+                    <div class="stat-card-label">Tổng doanh thu</div>
+                    <div class="stat-card-value" id="statTotalRevenue">0 đ</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-card-label">Số hóa đơn hợp lệ</div>
+                    <div class="stat-card-value" id="statInvoiceCount">0</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-card-label">Doanh thu TB / hóa đơn</div>
+                    <div class="stat-card-value" id="statAvgInvoice">0 đ</div>
+                </div>
+                <div class="stat-card cancelled-note">
+                    <div class="stat-card-label">Hóa đơn đã hủy (không tính vào tổng)</div>
+                    <div class="stat-card-value" id="statCancelled">0 hóa đơn — 0 đ</div>
+                </div>
+            </div>
+
+            <div class="payment-breakdown">
+                <h3>Doanh thu theo phương thức thanh toán</h3>
+                <div id="paymentBars">
+                    <div class="payment-bar-row">
+                        <div class="payment-bar-head"><span>Tiền mặt</span><span class="amount" id="pmCashAmount">0 đ (0%)</span></div>
+                        <div class="payment-bar-track"><div class="payment-bar-fill cash" id="pmCashBar" style="width:0%"></div></div>
+                    </div>
+                    <div class="payment-bar-row">
+                        <div class="payment-bar-head"><span>Chuyển khoản</span><span class="amount" id="pmTransferAmount">0 đ (0%)</span></div>
+                        <div class="payment-bar-track"><div class="payment-bar-fill transfer" id="pmTransferBar" style="width:0%"></div></div>
+                    </div>
+                    <div class="payment-bar-row">
+                        <div class="payment-bar-head"><span>Thẻ ATM</span><span class="amount" id="pmCardAmount">0 đ (0%)</span></div>
+                        <div class="payment-bar-track"><div class="payment-bar-fill card" id="pmCardBar" style="width:0%"></div></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="menu-page-header" style="margin-bottom:12px;">
+                <h2 style="font-size:18px;">Doanh thu theo ngày</h2>
+            </div>
+            <div class="data-table-wrapper">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Ngày</th>
+                            <th>Số hóa đơn</th>
+                            <th>Tiền mặt</th>
+                            <th>Chuyển khoản</th>
+                            <th>Thẻ ATM</th>
+                            <th>Tổng</th>
+                        </tr>
+                    </thead>
+                    <tbody id="dailyTableBody">
+                        <tr><td colspan="6"><div class="empty-table-state">Chưa có dữ liệu trong khoảng thời gian này.</div></td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <p class="sync-hint">Dữ liệu được đồng bộ tự động từ các hóa đơn do Nhân viên xác nhận thanh toán (lưu trong trình duyệt). Mở lại trang để cập nhật số liệu mới nhất.</p>
         </div>
     </main>
- 
-    <script src="asset/css/js/script.js"></script>
+
+    <!-- auth.js PHẢI nạp trước script.js: chặn trang nếu chưa đăng nhập / sai quyền -->
+    <script src="asset/js/auth.js"></script>
+    <script src="asset/js/common.js"></script>
+    <script src="asset/js/revenue.js"></script>
 </body>
 </html>

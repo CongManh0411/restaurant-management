@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Thanh toán</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="asset/css/style.css">
+</head>
+<body class="pay-body" data-page="pay">
+
+  <div class="pay-app">
+    <!-- Thanh trên cùng + nút mở menu (chỉ hiện trên iPad dọc / điện thoại) -->
+    <div class="pay-topbar">
+      <button type="button" class="pay-menu-btn" id="payMenuBtn" aria-label="Mở menu" aria-expanded="false" aria-controls="sidebar-container">☰</button>
+      <span>Thanh toán</span>
+    </div>
+    <div class="pay-scrim" id="payScrim"></div>
+
+    <!-- Sidebar nạp từ sidebar.html -->
+    <div id="sidebar-container"></div>
+
+    <main class="pay-main">
+      <header class="pay-head">
+        <h1>Thanh toán</h1>
+        <p>Chọn đơn, chọn phương thức, rồi tạo hóa đơn.</p>
+      </header>
+
+      <div class="pay-grid">
+        <!-- Cột trái: đơn chờ thanh toán -->
+        <section class="pay-orders" aria-labelledby="payOrdersTitle">
+          <h2 id="payOrdersTitle">Đơn chờ thanh toán</h2>
+          <ul id="payOrderList" class="pay-order-list"></ul>
+          <p id="payOrderEmpty" class="pay-empty" hidden>Chưa có đơn nào cần thanh toán. Đơn mới từ nhân viên order sẽ hiện ở đây.</p>
+        </section>
+
+        <!-- Cột phải: hóa đơn tạm + phương thức -->
+        <section class="pay-bill" aria-labelledby="payBillTitle">
+          <div id="payBillEmpty" class="pay-empty pay-empty-big">Chọn một đơn bên trái để bắt đầu thanh toán.</div>
+
+          <div id="payBillBody" hidden>
+            <h2 id="payBillTitle">Bàn <span id="payTableName"></span></h2>
+
+            <table class="pay-table">
+              <thead>
+                <tr><th>Món</th><th class="num">SL</th><th class="num">Đơn giá</th><th class="num">Thành tiền</th><th class="num"><span class="pay-sr">Thao tác</span></th></tr>
+              </thead>
+              <tbody id="payItems"></tbody>
+            </table>
+
+            <div class="pay-row">
+              <label for="payDiscountVal">Giảm giá</label>
+              <div class="pay-discount">
+                <input type="number" id="payDiscountVal" min="0" value="0" inputmode="numeric">
+                <select id="payDiscountType" aria-label="Loại giảm giá">
+                  <option value="vnd">đ</option>
+                  <option value="pct">%</option>
+                </select>
+              </div>
+            </div>
+
+            <dl class="pay-sum">
+              <div><dt>Tạm tính</dt><dd id="paySubtotal">0 đ</dd></div>
+              <div><dt>Giảm giá</dt><dd id="payDiscountShow">0 đ</dd></div>
+              <div class="pay-total"><dt>Khách cần trả</dt><dd id="payTotal">0 đ</dd></div>
+            </dl>
+
+            <fieldset class="pay-methods">
+              <legend>Phương thức thanh toán</legend>
+              <label class="pay-method"><input type="radio" name="payMethod" value="cash" checked><span>Tiền mặt</span></label>
+              <label class="pay-method"><input type="radio" name="payMethod" value="transfer"><span>Chuyển khoản</span></label>
+              <label class="pay-method"><input type="radio" name="payMethod" value="card"><span>Thẻ</span></label>
+              <label class="pay-method"><input type="radio" name="payMethod" value="ewallet"><span>Ví điện tử</span></label>
+            </fieldset>
+
+            <div id="payCashBox" class="pay-cash">
+              <label for="payCashGiven">Khách đưa</label>
+              <input type="number" id="payCashGiven" min="0" inputmode="numeric" placeholder="0">
+              <div class="pay-quick" id="payQuick"></div>
+              <p class="pay-change">Tiền thối lại: <strong id="payChange">0 đ</strong></p>
+            </div>
+
+            <p id="payHint" class="pay-hint" hidden></p>
+
+            <button type="button" id="payConfirm" class="pay-confirm" disabled>Xác nhận thanh toán</button>
+          </div>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <!-- Thông báo sau khi xóa món, có nút hoàn tác -->
+  <div id="payToast" class="pay-toast" role="status" hidden>
+    <span id="payToastMsg"></span>
+    <button type="button" id="payUndo">Hoàn tác</button>
+  </div>
+
+  <!-- Hóa đơn sau khi thanh toán -->
+  <div id="payModal" class="pay-modal" hidden>
+    <div class="pay-receipt" role="dialog" aria-modal="true" aria-labelledby="payReceiptTitle">
+      <div id="payReceipt"></div>
+      <div class="pay-receipt-actions">
+        <button type="button" id="payPrint" class="pay-btn pay-btn-line">In hóa đơn</button>
+        <button type="button" id="payClose" class="pay-btn pay-btn-solid">Xong</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- auth.js PHẢI nạp ĐẦU TIÊN: chặn trang nếu chưa đăng nhập / sai quyền,
+       và cấp AuthAPI/UserAPI/PAGES_BY_ROLE cho script.js dùng bên dưới. -->
+  <script src="asset/js/auth.js"></script>
+
+  <!-- script.js chung: nạp sidebar theo vai trò, đăng xuất, thông tin người dùng.
+       Phải nạp TRƯỚC script riêng của trang thanh toán bên dưới. -->
+  <script src="asset/js/common.js"></script>
+
+  <script src="asset/js/pay.js"></script>
+</body>
+</html>
+ 

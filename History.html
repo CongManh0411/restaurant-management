@@ -1,25 +1,91 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="vi">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="asset/css/style.css">
-    <title>Lịch sử</title>
+    <title>Hóa đơn</title>
 </head>
 <body data-page="history">
+    <!-- Sidebar sẽ được JS nạp vào đây (xem sidebar.html + script.js) -->
     <div id="sidebar-container"></div>
- 
+
     <main class="main">
+        <nav class="topnav period-filter-bar" id="statusFilterBar" style="padding:16px 24px 0; border-bottom:none;">
+            <button class="topnav-item active" data-status="all">Tất cả</button>
+            <button class="topnav-item" data-status="active">Đang hiệu lực</button>
+            <button class="topnav-item" data-status="cancelled">Đã hủy</button>
+            <span class="date-range-inputs active" style="margin-left:auto;">
+                <input type="text" id="searchBox" placeholder="Tìm mã HD hoặc tên bàn..." style="padding:8px 12px; border:1px solid #e0d3bd; border-radius:8px; font-family:'Poppins',sans-serif; font-size:13px; min-width:220px;">
+            </span>
+        </nav>
+
         <div class="main-content">
             <div class="menu-page-header">
-                <h2>Lịch sử</h2>
-                <p>Noi dung trang Lịch sử se lam sau.</p>
+                <h2>Hóa đơn</h2>
+                <p id="invoiceCountLabel">Tổng cộng 0 hóa đơn</p>
             </div>
+
+            <div class="data-table-wrapper">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Mã HD</th>
+                            <th>Bàn</th>
+                            <th>Ngày giờ</th>
+                            <th>Chi tiết món</th>
+                            <th>PTTT</th>
+                            <th>Tổng tiền</th>
+                            <th>Trạng thái</th>
+                            <th>Hành động</th>
+                        </tr>
+                    </thead>
+                    <tbody id="invoiceTableBody">
+                        <tr><td colspan="8"><div class="empty-table-state">Chưa có hóa đơn nào.</div></td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <p class="sync-hint">Hóa đơn được tạo tự động khi Nhân viên xác nhận thanh toán tại sơ đồ bàn. Xóa hóa đơn chỉ đánh dấu "Đã hủy" kèm lý do, không xóa vĩnh viễn dữ liệu.</p>
         </div>
     </main>
- 
-    <script src="asset/css/js/script.js"></script>
+
+    <!-- MODAL: Xóa hóa đơn -->
+    <div id="cancelModal" class="modal-overlay">
+        <div class="modal-box">
+            <h3 class="modal-title">Xóa hóa đơn</h3>
+            <p class="modal-sub">Hóa đơn <b id="cancelModalInvoiceId">--</b> — <b id="cancelModalTotal">0 đ</b>. Vui lòng nhập lý do xóa:</p>
+            <textarea id="cancelReasonInput" placeholder="Ví dụ: Khách yêu cầu hủy do gọi nhầm món, order trùng, sai giá..."></textarea>
+            <div class="modal-actions">
+                <button class="btn-outline" style="flex:1;" onclick="closeCancelModal()">Đóng</button>
+                <button class="btn-danger" style="flex:1; border:1px solid #c96a5b; background:#c96a5b; color:#fff;" id="btnConfirmCancel" disabled onclick="confirmCancelInvoice()">Xác nhận xóa</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL: Chi tiết hóa đơn -->
+    <div id="detailModal" class="modal-overlay">
+        <div class="modal-box" style="max-width:460px;">
+            <h3 class="modal-title" id="detailModalTitle">Chi tiết hóa đơn</h3>
+            <p class="modal-sub" id="detailModalMeta">--</p>
+            <div class="data-table-wrapper" style="margin-bottom:16px;">
+                <table class="data-table">
+                    <thead><tr><th>Món</th><th>SL</th><th>Thành tiền</th></tr></thead>
+                    <tbody id="detailModalItems"></tbody>
+                </table>
+            </div>
+            <div id="detailModalCancelNote"></div>
+            <div class="modal-actions">
+                <button class="btn-outline" style="flex:1;" onclick="closeDetailModal()">Đóng</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- auth.js PHẢI nạp trước script.js: chặn trang nếu chưa đăng nhập / sai quyền -->
+    <script src="asset/js/auth.js"></script>
+    <script src="asset/js/common.js"></script>
+    <script src="asset/js/history.js"></script>
 </body>
 </html>
