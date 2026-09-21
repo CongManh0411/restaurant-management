@@ -195,3 +195,24 @@ async function initSidebarMenu() {
         window.location.replace(homePage);
     }
 }
+
+// ============================================================
+// 2) TIỆN ÍCH DÙNG CHUNG (menu.js, history.js, revenue.js... đều dùng)
+//    common.js phải được nạp TRƯỚC các file trang đó.
+// ============================================================
+
+// Định dạng tiền VND: 29000 -> "29.000 đ"
+function fmtMoney(n) {
+    return `${Math.round(Number(n) || 0).toLocaleString('vi-VN')} đ`;
+}
+
+// Escape ký tự đặc biệt trước khi chèn chuỗi vào innerHTML (cả trong nội dung lẫn trong
+// thuộc tính như value="..." / data-id="..."). Nhận cả số/null/undefined.
+function escapeHtml(value) {
+    return String(value ?? '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+}
