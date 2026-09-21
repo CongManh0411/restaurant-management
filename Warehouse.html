@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="asset/css/style.css">
+    <title>Kho nguyên liệu</title>
+</head>
+<body data-page="warehouse">
+    <div id="sidebar-container"></div>
+
+    <main class="main">
+        <!-- Thanh điều hướng ngang — các thao tác trong trang Kho -->
+        <nav class="topnav">
+            <button class="topnav-item active" data-action="list">Danh sách kho</button>
+            <button class="topnav-item" data-action="add">Thêm nguyên liệu</button>
+        </nav>
+
+        <div class="main-content">
+            <!-- ============ PANEL: Danh sách kho ============ -->
+            <div class="tab-panel active" id="panel-list">
+                <div class="menu-page-header">
+                    <h2>Kho nguyên liệu</h2>
+                    <p>Tất cả nhân viên đều có thể kiểm tra và cập nhật kho. Kho chỉ chứa nguyên liệu đầu vào; tồn kho của món bán không được quản lý trực tiếp.</p>
+                </div>
+
+                <!-- Thẻ số liệu tổng quan -->
+                <div class="stats-grid" id="inventoryStats">
+                    <div class="stat-card">
+                        <div class="stat-card-label">Tổng số nguyên liệu</div>
+                        <div class="stat-card-value" id="totalIngredients">0</div>
+                    </div>
+                    <div class="stat-card cancelled-note">
+                        <div class="stat-card-label">Dưới định mức</div>
+                        <div class="stat-card-value" id="underMinLevel">0</div>
+                    </div>
+                    <div class="stat-card highlight">
+                        <div class="stat-card-label">Tổng số lượng tồn</div>
+                        <div class="stat-card-value" id="totalStock">0</div>
+                    </div>
+                </div>
+
+                <div class="content-section-title">Danh sách kho nguyên liệu</div>
+                <div class="data-table-wrapper">
+                    <table class="data-table" id="inventoryTable">
+                        <thead>
+                            <tr>
+                                <th>Nguyên liệu</th>
+                                <th>Đơn vị</th>
+                                <th>Tồn kho</th>
+                                <th>Định mức min</th>
+                                <th>Cần mua</th>
+                                <th>Mã vận đơn</th>
+                                <th>Trạng thái</th>
+                                <th>Hành động</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tableBody">
+                            <!-- Table rows will be generated here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- ============ PANEL: Thêm nguyên liệu ============ -->
+            <div class="tab-panel" id="panel-add">
+                <div class="menu-page-header">
+                    <h2 id="inventoryFormTitle">Thêm nguyên liệu mới</h2>
+                </div>
+
+                <!-- Trạng thái đang sửa -->
+                <div id="editModeIndicator" class="edit-mode-indicator">
+                    📝 Đang chỉnh sửa nguyên liệu
+                </div>
+
+                <form id="inventoryForm" class="add-item-form">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="ingredientName">Tên nguyên liệu</label>
+                            <input type="text" id="ingredientName" placeholder="Ví dụ: Cà phê hạt" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="unit">Đơn vị</label>
+                            <input type="text" id="unit" placeholder="g, ml, kg, hộp, cái..." required>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="stock">Tồn ban đầu</label>
+                            <input type="number" id="stock" placeholder="0" value="0" min="0" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="minLevel">Định mức min</label>
+                            <input type="number" id="minLevel" placeholder="0" value="0" min="0" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="trackingCode">Mã vận đơn</label>
+                        <input type="text" id="trackingCode" placeholder="Ví dụ: VN123456789" required>
+                    </div>
+
+                    <button type="submit" class="btn-submit" id="submitBtn">Thêm nguyên liệu</button>
+                    <button type="button" class="btn-outline btn-cancel-edit" id="btnCancelEdit" style="display:none;">Hủy sửa</button>
+                    <p class="form-subtext">Sau khi tạo nguyên liệu, Quản lý có thể dùng nguyên liệu đó để lập công thức cho từng món trong Menu.</p>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <!-- auth.js PHẢI nạp trước script.js: chặn trang nếu chưa đăng nhập / sai quyền -->
+    <script src="asset/js/auth.js"></script>
+    <script src="asset/js/portable-shim.js"></script>
+    <script src="asset/js/common.js"></script>
+    <script src="asset/js/warehouse.js"></script>
+</body>
+</html>

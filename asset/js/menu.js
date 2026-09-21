@@ -272,14 +272,10 @@ const MenuAPI = {
  
 let currentMenuData = []; // cache dữ liệu menu đang hiển thị, dùng chung cho tab Sửa món + Định mức
  
-// Tạo 1 thẻ <option> cho <select> (dùng textContent/value nên tên món/danh mục có ký tự đặc biệt cũng không vỡ)
-function createOption(value, text) {
-    const opt = document.createElement('option');
-    opt.value = value;
-    opt.textContent = text;
-    return opt;
+function formatPrice(price) {
+    return price.toLocaleString('vi-VN') + 'đ';
 }
-
+ 
 // Tạo 1 nút thao tác (Định mức / Ẩn / Xóa)
 function createActionButton(className, action, id, text) {
     const btn = document.createElement('button');
@@ -317,7 +313,7 @@ function createMenuItemEl(item) {
  
     const priceEl = document.createElement('div');
     priceEl.className = 'menu-item-price';
-    priceEl.textContent = fmtMoney(item.price);
+    priceEl.textContent = formatPrice(item.price);
     rightEl.appendChild(priceEl);
  
     if (!item.hasRecipe) {
@@ -456,11 +452,10 @@ const itemCategorySelectEl = document.getElementById('itemCategory');
 // Đổ danh mục hiện có vào <select> của form Thêm món
 function populateCategorySelect() {
     if (!itemCategorySelectEl) return;
-    itemCategorySelectEl.innerHTML = ''; // chỉ dùng để xóa nội dung cũ, không chèn HTML mới
-    itemCategorySelectEl.appendChild(createOption('', '-- Chọn danh mục --'));
-    currentMenuData.forEach(c => {
-        itemCategorySelectEl.appendChild(createOption(c.category, c.category));
-    });
+    const categories = currentMenuData.map(c => c.category);
+    itemCategorySelectEl.innerHTML =
+        '<option value="">-- Chọn danh mục --</option>' +
+        categories.map(c => `<option value="${c}">${c}</option>`).join('');
 }
  
 // Đưa form về chế độ "Thêm món" mặc định (xoá id đang sửa, đổi lại tiêu đề/nút)
@@ -663,10 +658,9 @@ async function refreshRecipeItemOptions() {
     const items = getFlatMenuItems();
     const keepSelected = recipeSelectEl.value;
  
-    recipeSelectEl.innerHTML = ''; // chỉ dùng để xóa nội dung cũ, không chèn HTML mới
-    items.forEach(item => {
-        recipeSelectEl.appendChild(createOption(item.id, item.name));
-    });
+    recipeSelectEl.innerHTML = items
+        .map(item => `<option value="${item.id}">${item.name}</option>`)
+        .join('');
  
     if (!items.length) return;
  

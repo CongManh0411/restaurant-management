@@ -32,19 +32,24 @@
 const ROLE_LABELS = {
     manager: 'Quản lý',
     cashier: 'Thu ngân',
+    waiter: 'Phục vụ',
 };
 
 const PAGES_BY_ROLE = {
     manager: [
-        { path: 'Table.html',   label: 'Bàn',        view: 'tables' },
+        { path: 'TableManage.html', label: 'Bàn',    view: 'tablemanage', id: 'navTables' },
         { path: 'Menu.html',    label: 'Menu',       view: 'menu',    id: 'navMenu' },
         { path: 'Revenue.html', label: 'Doanh thu',  view: 'revenue', id: 'navRevenue' },
         { path: 'History.html', label: 'Lịch sử',    view: 'history', id: 'navHistory' },
         { path: 'Staff.html',   label: 'Nhân viên',  view: 'staff',   id: 'navStaff' },
+        { path: 'warehouse.html', label: 'Kho', view: 'warehouse', id: 'navWarehouse' },
     ],
     cashier: [
         // Thu ngân chỉ có đúng 1 mục trong sidebar: Thanh toán.
         { path: 'Pay.html',     label: 'Thanh toán', view: 'pay',     id: 'navPay' },
+    ],
+    waiter: [
+        { path: 'Table.html', label: 'Bàn', view: 'tables' },
     ],
 };
 
@@ -55,6 +60,19 @@ const DEMO_ACCOUNTS = [
     { username: 'quanly',  password: '123456', roleKey: 'manager', name: 'Nguyễn Văn A' },
     { username: 'thungan', password: '123456', roleKey: 'cashier', name: 'Trần Thị B' },
 ];
+
+// ---- Tài khoản tạo ở trang Nhân viên (lưu trong localStorage) cũng đăng nhập được ----
+const STAFF_STORAGE_KEY = 'coffee_staff_v1';
+const STAFF_ROLE_MAP = { 'Quản lý': 'manager', 'Thu ngân': 'cashier', 'Phục vụ': 'waiter' };
+function getAllAccounts() {
+    let extra = [];
+    try {
+        const list = JSON.parse(localStorage.getItem(STAFF_STORAGE_KEY));
+        if (Array.isArray(list)) extra = list.filter(x => STAFF_ROLE_MAP[x.role])
+            .map(x => ({ username: x.username, password: x.password, roleKey: STAFF_ROLE_MAP[x.role], name: x.fullName }));
+    } catch (err) {}
+    return DEMO_ACCOUNTS.concat(extra);
+}
 
 // ---- 3) NƠI LƯU PHIÊN ĐĂNG NHẬP (BẢN DEMO: localStorage) ----
 const AUTH_STORAGE_KEY = 'coffee_auth_session_v1'; // lưu { roleKey, name }
@@ -72,7 +90,7 @@ const AuthAPI = {
     // ném lỗi (throw) nếu sai tài khoản/mật khẩu.
     async login(username, password) {
         // ---- BẢN DEMO ----
-        const acc = DEMO_ACCOUNTS.find(
+        const acc = getAllAccounts().find(
             a => a.username === username.trim() && a.password === password
         );
         if (!acc) throw new Error('Sai tên đăng nhập hoặc mật khẩu.');

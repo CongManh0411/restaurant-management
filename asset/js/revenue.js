@@ -1,18 +1,14 @@
-// ============================================================
-// revenue.js — LOGIC RIÊNG CỦA TRANG DOANH THU (chỉ nạp trong Revenue.html)
-// Thứ tự nạp: auth.js -> common.js -> invoice-api.js -> revenue.js
-//   - Dữ liệu lấy qua InvoiceAPI.getInvoices({ from, to }) (invoice-api.js)
-//   - fmtMoney() nằm ở common.js (dùng chung)
-// ============================================================
-
+const LS_INVOICES_KEY = 'qlcp_invoices';
 let currentPeriod = 'today';
 let customFrom = null;
 let customTo = null;
 
-let invoicesInRange = [];  // hóa đơn của khoảng thời gian đang chọn (đã lấy từ InvoiceAPI)
-let latestRequestId = 0;   // chống "kết quả cũ về trễ ghi đè kết quả mới" khi đổi kỳ liên tiếp
+function loadInvoices() {
+    try { return JSON.parse(localStorage.getItem(LS_INVOICES_KEY)) || []; }
+    catch (e) { return []; }
+}
 
-const dailyTableBodyEl = document.getElementById('dailyTableBody');
+function fmtMoney(n) { return `${Math.round(n).toLocaleString('vi-VN')} đ`; }
 
 function startOfDay(d) { const x = new Date(d); x.setHours(0,0,0,0); return x; }
 function endOfDay(d) { const x = new Date(d); x.setHours(23,59,59,999); return x; }
@@ -51,40 +47,18 @@ function getPeriodRange(period) {
     return { start: startOfDay(now), end: endOfDay(now), label: 'Doanh thu hôm nay' };
 }
 
-// ============================================================
-// 1) TẢI DỮ LIỆU (qua InvoiceAPI) — có trạng thái "đang tải" và "lỗi"
-// ============================================================
-function showTableMessage(text) {
-    dailyTableBodyEl.innerHTML = `<tr><td colspan="6"><div class="empty-table-state">${escapeHtml(text)}</div></td></tr>`;
-}
-
-// silent = true: tải lại ngầm (không nháy chữ "Đang tải...") — dùng khi tab khác thay đổi dữ liệu
-async function reloadInvoices({ silent = false } = {}) {
-    const { start, end } = getPeriodRange(currentPeriod);
-    const requestId = ++latestRequestId;
-    if (!silent) showTableMessage('Đang tải dữ liệu...');
-
-    try {
-        const list = await InvoiceAPI.getInvoices({ from: start, to: end });
-        if (requestId !== latestRequestId) return; // đã có lần tải mới hơn, bỏ kết quả này
-        invoicesInRange = list;
-        render();
-    } catch (err) {
-        if (requestId !== latestRequestId) return;
-        console.error('Không tải được hóa đơn:', err);
-        showTableMessage('Không tải được dữ liệu doanh thu. Vui lòng tải lại trang.');
-    }
-}
-
-// ============================================================
-// 2) VẼ THỐNG KÊ + BẢNG THEO NGÀY (chạy đồng bộ trên invoicesInRange)
-// ============================================================
 function render() {
-    const { label } = getPeriodRange(currentPeriod);
+    const { start, end, label } = getPeriodRange(currentPeriod);
     document.getElementById('periodLabel').innerText = label;
 
-    const active = invoicesInRange.filter(i => i.status === 'active');
-    const cancelled = invoicesInRange.filter(i => i.status === 'cancelled');
+    const all = loadInvoices();
+    const inRange = all.filter(inv => {
+        const t = new Date(inv.createdAt);
+        return t >= start && t <= end;
+    });
+
+    const active = inRange.filter(i => i.status === 'active');
+    const cancelled = inRange.filter(i => i.status === 'cancelled');
 
     const totalRevenue = active.reduce((s, i) => s + i.total, 0);
     const cancelledTotal = cancelled.reduce((s, i) => s + i.total, 0);
@@ -118,10 +92,11 @@ function render() {
     });
     const days = Object.entries(byDay).sort((a, b) => b[1].sortKey - a[1].sortKey);
 
+    const tbody = document.getElementById('dailyTableBody');
     if (days.length === 0) {
-        showTableMessage('Chưa có dữ liệu trong khoảng thời gian này.');
+        tbody.innerHTML = `<tr><td colspan="6"><div class="empty-table-state">Chưa có dữ liệu trong khoảng thời gian này.</div></td></tr>`;
     } else {
-        dailyTableBodyEl.innerHTML = days.map(([date, d]) => `
+        tbody.innerHTML = days.map(([date, d]) => `
             <tr>
                 <td><b>${date}</b></td>
                 <td>${d.count}</td>
@@ -134,9 +109,6 @@ function render() {
     }
 }
 
-// ============================================================
-// 3) SỰ KIỆN: đổi kỳ + chọn khoảng ngày tùy chọn
-// ============================================================
 document.getElementById('periodFilterBar').addEventListener('click', (e) => {
     const btn = e.target.closest('.topnav-item');
     if (!btn) return;
@@ -144,20 +116,19 @@ document.getElementById('periodFilterBar').addEventListener('click', (e) => {
     btn.classList.add('active');
     currentPeriod = btn.dataset.period;
     document.getElementById('dateRangeInputs').classList.toggle('active', currentPeriod === 'custom');
-    if (currentPeriod !== 'custom') reloadInvoices();
+    if (currentPeriod !== 'custom') render();
 });
 
 document.getElementById('btnApplyRange').addEventListener('click', () => {
     customFrom = document.getElementById('dateFrom').value;
     customTo = document.getElementById('dateTo').value;
     if (!customFrom || !customTo) { alert('Vui lòng chọn đủ Từ ngày và Đến ngày.'); return; }
-    reloadInvoices();
+    render();
 });
 
-// ============================================================
-// 4) KHỞI ĐỘNG TRANG
-// ============================================================
-// Tự cập nhật nếu có hóa đơn mới được tạo ở nơi khác (vd: tab Thanh toán)
-InvoiceAPI.subscribe(() => reloadInvoices({ silent: true }));
+// Tự cập nhật nếu có hóa đơn mới được tạo ở tab/trang khác (cùng trình duyệt)
+window.addEventListener('storage', (e) => {
+    if (e.key === LS_INVOICES_KEY) render();
+});
 
-reloadInvoices();
+render();

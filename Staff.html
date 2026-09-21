@@ -10,18 +10,85 @@
 </head>
 <body data-page="staff">
     <div id="sidebar-container"></div>
- 
+
     <main class="main">
+        <!-- Thanh điều hướng ngang — các thao tác trong trang Nhân viên -->
+        <nav class="topnav">
+            <button class="topnav-item active" data-action="list">Danh sách nhân viên</button>
+            <button class="topnav-item" data-action="add">Thêm nhân viên</button>
+        </nav>
+
         <div class="main-content">
-            <div class="menu-page-header">
-                <h2>Nhân viên</h2>
-                <p>Noi dung trang Nhân viên se lam sau.</p>
+            <!-- ============ PANEL: Danh sách nhân viên ============ -->
+            <div class="tab-panel active" id="panel-list">
+                <div class="menu-page-header">
+                    <h2>Nhân viên</h2>
+                    <p>Danh sách tài khoản, chức vụ và công việc được phân công.</p>
+                </div>
+
+                <div class="staff-list" id="staffList">
+                    <!-- Danh sách nhân viên sẽ được đổ vào đây -->
+                </div>
+            </div>
+
+            <!-- ============ PANEL: Thêm nhân viên ============ -->
+            <div class="tab-panel" id="panel-add">
+                <div class="menu-page-header">
+                    <h2 id="staffFormTitle">Thêm nhân viên mới</h2>
+                    <p>Tạo tài khoản, chọn chức vụ và phân công công việc.</p>
+                </div>
+
+                <!-- Trạng thái đang sửa -->
+                <div id="editModeIndicator" class="edit-mode-indicator">
+                    📝 Đang chỉnh sửa thông tin nhân viên
+                </div>
+
+                <form id="staffForm" class="add-item-form">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="fullName">Họ tên</label>
+                            <input type="text" id="fullName" placeholder="Nhập họ tên" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="role">Chức vụ</label>
+                            <select id="role" required>
+                                <option value="">-- Chọn chức vụ --</option>
+                                <option value="Quản lý">Quản lý</option>
+                                <option value="Thu ngân">Thu ngân</option>
+                                <option value="Phục vụ">Phục vụ</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="username">Tài khoản</label>
+                            <input type="text" id="username" placeholder="Nhập tài khoản" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="password">Mật khẩu</label>
+                            <input type="password" id="password" placeholder="Nhập mật khẩu" required>
+                        </div>
+                    </div>
+
+                    <div class="checkboxes-section">
+                        <div class="checkboxes-title">Công việc được phân công</div>
+                        <div class="checkboxes-grid" id="tasksCheckboxes">
+                            <!-- Checkboxes will be generated here -->
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn-submit" id="submitBtn">Tạo tài khoản</button>
+                    <button type="button" class="btn-outline btn-cancel-edit" id="btnCancelEdit" style="display:none;">Hủy sửa</button>
+                </form>
             </div>
         </div>
     </main>
- 
+
     <!-- auth.js PHẢI nạp trước script.js: chặn trang nếu chưa đăng nhập / sai quyền -->
     <script src="asset/js/auth.js"></script>
+    <script src="asset/js/portable-shim.js"></script>
     <script src="asset/js/common.js"></script>
+    <script src="asset/js/staff.js"></script>
 </body>
 </html>
