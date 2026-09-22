@@ -1,104 +1,82 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="vi">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="asset/css/style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="asset/css/order.css">
+    <link rel="stylesheet" href="asset/css/table-manage.css">
     <title>Bàn</title>
 </head>
 <body data-page="tablemanage">
     <div id="sidebar-container"></div>
- 
+
     <main class="main">
-<div id="order-app">
-<!-- VIEW 1: SƠ ĐỒ BÀN -->
-        <div id="view-tables" class="view-panel active">
-            <div class="topnav">
-                <button class="topnav-item active" onclick="filterTables('all')">Tất cả bàn</button>
-                <button class="topnav-item" onclick="filterTables('empty')">Bàn trống</button>
-                <button class="topnav-item" onclick="filterTables('occupied')">Đang phục vụ</button>
-                <button class="topnav-item" onclick="filterTables('pending')">Chờ thanh toán</button>
+        <div class="main-content">
+            <div class="menu-page-header">
+                <h2>Quản lý bàn</h2>
+                <p>Thêm, sửa tên hoặc xóa bàn. Trạng thái bàn cập nhật theo thời gian thực từ trang Phục vụ.</p>
             </div>
 
-            <div class="main-content">
-                <h2 class="tables-title">Sơ Đồ Bàn</h2>
-                <div id="tablesGrid" class="tables-grid"></div>
+            <div class="tm-toolbar">
+                <p class="tm-summary" id="tableSummary">Tổng cộng 0 bàn</p>
+                <button type="button" class="btn-submit" id="btnAddTable">+ Thêm bàn</button>
+            </div>
+
+            <div class="data-table-wrapper">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Tên bàn</th>
+                            <th>Trạng thái</th>
+                            <th>Vào lúc</th>
+                            <th>Hành động</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tableManageBody">
+                        <tr><td colspan="4"><div class="empty-table-state">Chưa có bàn nào. Bấm "+ Thêm bàn" để bắt đầu.</div></td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <p class="sync-hint">Chỉ xóa được bàn đang trống. Bàn đang phục vụ hoặc chờ thanh toán sẽ xóa được sau khi Thu ngân thanh toán xong. Đổi tên bàn không ảnh hưởng hóa đơn đã lập.</p>
+        </div>
+    </main>
+
+    <!-- MODAL: Thêm / sửa bàn -->
+    <div id="tableModal" class="modal-overlay">
+        <form class="modal-box" id="tableForm" novalidate>
+            <h3 class="modal-title" id="tableModalTitle">Thêm bàn</h3>
+            <p class="modal-sub" id="tableModalSub">Nhập tên bàn mới.</p>
+            <div class="form-group">
+                <label for="tableNameInput">Tên bàn</label>
+                <input type="text" id="tableNameInput" maxlength="30" autocomplete="off" placeholder="Ví dụ: Bàn 09">
+            </div>
+            <p class="tm-error" id="tableNameError" role="alert" hidden></p>
+            <div class="modal-actions">
+                <button type="button" class="btn-outline" id="btnTableCancel">Đóng</button>
+                <button type="submit" class="btn-submit" id="btnTableSave">Thêm bàn</button>
+            </div>
+        </form>
+    </div>
+
+    <!-- MODAL: Xác nhận xóa bàn -->
+    <div id="deleteModal" class="modal-overlay">
+        <div class="modal-box">
+            <h3 class="modal-title">Xóa bàn</h3>
+            <p class="modal-sub">Bạn có chắc muốn xóa <b id="deleteModalName">--</b>? Bàn sẽ biến mất khỏi sơ đồ bàn của Phục vụ.</p>
+            <div class="modal-actions">
+                <button type="button" class="btn-outline" id="btnDeleteCancel">Đóng</button>
+                <button type="button" class="tm-danger-solid" id="btnDeleteConfirm">Xác nhận xóa</button>
             </div>
         </div>
+    </div>
 
-        <!-- VIEW 2: MENU GỌI MÓN & HÓA ĐƠN TẠM TÍNH -->
-        <div id="view-menu" class="view-panel">
-            <div class="topnav">
-                <button type="button" class="topnav-back" id="btnBackToTables" onclick="backToTables()">
-                    <i class="fa-solid fa-arrow-left"></i> Quay lại sơ đồ bàn
-                </button>
-                <button class="topnav-item active" onclick="filterCategory('all')">Tất cả</button>
-                <button class="topnav-item" onclick="filterCategory('cafe')">Cafe</button>
-                <button class="topnav-item" onclick="filterCategory('tea')">Trà Trái Cây</button>
-                <button class="topnav-item" onclick="filterCategory('milktea')">Trà Sữa</button>
-                <button class="topnav-item" onclick="filterCategory('soft')">Nước Ngọt</button>
-            </div>
-
-            <div class="main-content">
-                <!-- Cảnh báo khi chưa chọn bàn -->
-                <div id="no-table-warning" class="menu-empty-state">
-                    <div class="empty-icon"><i class="fa-solid fa-chair"></i></div>
-                    <div>Vui lòng chọn bàn từ <b>Sơ Đồ Bàn</b> để bắt đầu gọi món!</div>
-                </div>
-
-                <!-- Màn hình Order 2 cột (Menu dòng bên trái + Bill bên phải) -->
-                <div id="order-screen" class="order-screen">
-                    <div class="order-layout-container">
-                        
-                        <!-- CỘT TRÁI: DÒNG MENU DẠNG ADMIN -->
-                        <div class="menu-section">
-                            <div id="menuGrid" class="menu-grid"></div>
-                        </div>
-
-                        <!-- CỘT PHẢI: HÓA ĐƠN TẠM TÍNH -->
-                        <div class="bill-section">
-                            <div class="bill-header">
-                                <h3 id="currentTableTitle" class="current-table-title">Chưa chọn bàn</h3>
-                                <span id="currentInvoiceId" class="current-invoice-id">Mã HD: --</span>
-                            </div>
-
-                            <hr class="bill-divider-dashed">
-
-                            <div class="selected-items-title">Món đã chọn:</div>
-                            <div id="billItems" class="bill-items-container">
-                                <div class="bill-empty">Chưa chọn món nào</div>
-                            </div>
-
-                            <hr class="bill-divider">
-
-                            <div class="bill-total">
-                                <span>Tạm tính:</span>
-                                <span id="totalAmount" class="total-amount">0 đ</span>
-                            </div>
-
-                            <!-- NÚT GỬI PHA CHẾ & BÁO THU NGÂN -->
-                            <div id="billActions" class="bill-actions">
-                                <button class="btn-submit" disabled>Gửi Pha Chế</button>
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
-            </div>
-        </div>
-
-    
-</div>
-</main>
- 
-    <!-- auth.js PHẢI nạp trước script.js: chặn trang nếu chưa đăng nhập / sai quyền -->
+    <!-- auth.js PHẢI nạp trước common.js: chặn trang nếu chưa đăng nhập / sai quyền -->
     <script src="asset/js/auth.js"></script>
     <script src="asset/js/portable-shim.js"></script>
-<script src="asset/js/common.js"></script>
-    <script src="asset/js/table-order.js"></script>
+    <script src="asset/js/common.js"></script>
+    <script src="asset/js/table-manage.js"></script>
 </body>
 </html>
