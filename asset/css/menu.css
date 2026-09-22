@@ -1,0 +1,264 @@
+/* ============================================================
+   menu.css — CSS RIÊNG cho Menu.html
+   Tách từ asset/css/style.css để dễ quản lý.
+   File này cần link SAU asset/css/style.css.
+   ============================================================ */
+
+
+
+/* ---- Thanh công cụ trên danh sách món (ô tìm kiếm) ---- */
+.menu-toolbar {
+    margin-bottom: 20px;
+}
+.menu-search-input {
+    width: 100%;
+    box-sizing: border-box;
+    font-family: "Poppins", sans-serif;
+    font-size: 14px;
+    color: #3b2313;
+    padding: 10px 14px;
+    border: 1px solid #e0d3bd;
+    border-radius: 8px;
+    background: #fff;
+}
+.menu-search-input::placeholder {
+    color: #c4b8a5;
+}
+.menu-search-input:focus {
+    outline: none;
+    border-color: #c99a5b;
+}
+
+/* ---- Trạng thái chưa có món nào / đang tải / lỗi ---- */
+.menu-empty-state,
+.menu-loading {
+    text-align: center;
+    padding: 60px 20px;
+    color: #b3a48f;
+    font-size: 14px;
+    background: #fff;
+    border: 1px dashed #e0d3bd;
+    border-radius: 12px;
+}
+.menu-error-state {
+    text-align: center;
+    padding: 60px 20px;
+    color: #b5573c;
+    font-size: 14px;
+    background: #fbe9e3;
+    border: 1px dashed #e3b3a4;
+    border-radius: 12px;
+}
+ 
+/* ---- Danh mục ---- */
+.menu-category {
+    margin-bottom: 32px;
+}
+.menu-category h3 {
+    font-family: "Poppins", sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+    color: #4a2a18;
+    margin: 0 0 12px;
+    padding-bottom: 6px;
+    border-bottom: 2px solid #c99a5b;
+    display: inline-block;
+}
+ 
+/* ---- Từng dòng món ---- */
+.menu-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 14px 4px;
+    border-bottom: 1px solid #ece2d3;
+}
+.menu-item:last-child {
+    border-bottom: none;
+}
+ 
+.menu-item-name {
+    font-family: "Poppins", sans-serif;
+    font-weight: 600;
+    font-size: 15px;
+    color: #3b2313;
+}
+.menu-item-desc {
+    font-size: 13px;
+    color: #a99a86;
+    margin-top: 2px;
+}
+ 
+.menu-item-right {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+}
+ 
+.menu-item-price {
+    font-weight: 600;
+    font-size: 14px;
+    color: #3b2313;
+    min-width: 70px;
+    text-align: right;
+}
+ 
+/* Badge trạng thái "Chưa định mức" */
+.menu-item-status {
+    font-size: 12px;
+    font-weight: 600;
+    color: #b5573c;
+    background: #fbe9e3;
+    padding: 4px 10px;
+    border-radius: 12px;
+    white-space: nowrap;
+}
+ 
+/* ---- Nút thao tác ---- */
+.menu-item-actions {
+    display: flex;
+    gap: 8px;
+}
+
+/* ---- Ẩn/hiện panel theo tab ---- */
+.tab-panel {
+    display: none;
+}
+.tab-panel.active {
+    display: block;
+}
+
+/* ---- Định mức nguyên liệu ---- */
+.recipe-card {
+    max-width: 640px;
+}
+
+.recipe-toolbar {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    margin-bottom: 18px;
+}
+
+.recipe-select {
+    flex: 1;
+    box-sizing: border-box;
+    font-family: "Poppins", sans-serif;
+    font-size: 14px;
+    color: #3b2313;
+    padding: 10px 12px;
+    border: 1px solid #e0d3bd;
+    border-radius: 8px;
+    background: #fff;
+}
+.recipe-select:focus {
+    outline: none;
+    border-color: #c99a5b;
+}
+
+.recipe-toolbar .btn-outline {
+    white-space: nowrap;
+}
+
+.ingredient-list {
+    border: 1px solid #e0d3bd;
+    border-radius: 8px;
+    min-height: 90px;
+    padding: 16px;
+    margin-bottom: 16px;
+    background: #fff;
+}
+
+.ingredient-empty {
+    color: #b3a48f;
+    font-size: 14px;
+}
+
+.ingredient-row {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    padding: 8px 0;
+    border-bottom: 1px solid #ece2d3;
+}
+.ingredient-row:last-child {
+    border-bottom: none;
+}
+
+.ingredient-row input {
+    box-sizing: border-box;
+    font-family: "Poppins", sans-serif;
+    font-size: 13px;
+    color: #3b2313;
+    padding: 8px 10px;
+    border: 1px solid #e0d3bd;
+    border-radius: 6px;
+    background: #fff;
+}
+.ingredient-row input:focus {
+    outline: none;
+    border-color: #c99a5b;
+}
+
+.ingredient-row .ing-name { flex: 2; }
+.ingredient-row .ing-qty { flex: 1; }
+.ingredient-row .ing-unit { flex: 1; }
+
+.ingredient-row .btn-remove {
+    background: none;
+    border: none;
+    color: #b5573c;
+    cursor: pointer;
+    font-size: 18px;
+    line-height: 1;
+    padding: 4px 6px;
+}
+.ingredient-row .btn-remove:hover {
+    color: #c96a5b;
+}
+
+.recipe-status {
+    font-size: 13px;
+    font-weight: 600;
+    color: #b5573c;
+    margin-bottom: 16px;
+}
+.recipe-status.done {
+    color: #4a8f5b;
+}
+
+/* ---- Điện thoại / màn hình hẹp: phần riêng của Menu.html ---- */
+@media (max-width: 768px) {
+    .add-item-form,
+    .recipe-card {
+        max-width: 100%;
+    }
+}
+
+/* ---- Màn hình rất nhỏ ---- */
+@media (max-width: 640px) {
+    .form-row {
+        flex-direction: column;
+        gap: 0;
+    }
+    .menu-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+    .menu-item-right {
+        width: 100%;
+        justify-content: space-between;
+        flex-wrap: wrap;
+    }
+    .menu-item-actions {
+        flex-wrap: wrap;
+    }
+    .recipe-toolbar {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    .ingredient-row {
+        flex-wrap: wrap;
+    }
+}

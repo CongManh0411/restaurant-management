@@ -1,0 +1,72 @@
+/* ============================================================
+   history.css — CSS RIÊNG cho History.html
+   Tách từ asset/css/style.css để dễ quản lý. (.data-table dùng chung nằm trong style.css)
+   File này cần link SAU asset/css/style.css.
+   ============================================================ */
+
+
+
+/* ---- Modal (Xóa hóa đơn / Chi tiết hóa đơn) ---- */
+.modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(43, 26, 15, 0.45);
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+    padding: 16px;
+    box-sizing: border-box;
+}
+.modal-overlay.active {
+    display: flex;
+}
+.modal-box {
+    width: 100%;
+    max-width: 400px;
+    background: #fffaf3;
+    border-radius: 16px;
+    padding: 24px;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35);
+    box-sizing: border-box;
+    max-height: 85vh;
+    overflow-y: auto;
+}
+.modal-title {
+    font-family: "Playfair Display", serif;
+    font-weight: 700;
+    font-size: 19px;
+    color: #3b2313;
+    margin: 0 0 8px;
+}
+.modal-sub {
+    font-size: 13px;
+    color: #7a5c3e;
+    margin: 0 0 16px;
+    line-height: 1.5;
+}
+.modal-box textarea {
+    width: 100%;
+    box-sizing: border-box;
+    font-family: "Poppins", sans-serif;
+    font-size: 13.5px;
+    color: #3b2313;
+    padding: 10px 12px;
+    border: 1px solid #e0d3bd;
+    border-radius: 8px;
+    background: #fff;
+    min-height: 80px;
+    resize: vertical;
+    margin-bottom: 16px;
+}
+.modal-box textarea:focus {
+    outline: none;
+    border-color: #c99a5b;
+}
+.modal-box textarea::placeholder {
+    color: #c4b8a5;
+}
+.modal-actions {
+    display: flex;
+    gap: 10px;
+}

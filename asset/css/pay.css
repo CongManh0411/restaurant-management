@@ -1,0 +1,954 @@
+/* ============================================================
+   pay.css — CSS RIÊNG cho Pay.html
+   Tách từ asset/css/style.css để dễ quản lý.
+   File này cần link SAU asset/css/style.css.
+   ============================================================ */
+
+
+
+/* Thuộc tính hidden luôn thắng display của các class bên dưới */
+.pay-body [hidden] {
+    display: none !important;
+}
+
+.pay-body {
+    font-family: "Poppins", sans-serif;
+    color: #3b2313;
+}
+
+/* ---- Khung app: sidebar bên trái + nội dung bên phải ---- */
+.pay-app {
+    flex: 1;
+    min-width: 0;
+    height: 100vh;
+    height: 100dvh;
+    display: flex;
+}
+.pay-app > #sidebar-container {
+    flex-shrink: 0;
+}
+
+/* ---- Topbar + nút ☰ (chỉ hiện ở iPad dọc / điện thoại, xem phần responsive) ---- */
+.pay-topbar {
+    display: none;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 16px;
+    padding-top: calc(14px + env(safe-area-inset-top, 0px));
+    background: linear-gradient(180deg, #4a2a18 0%, #351d10 100%);
+    box-sizing: border-box;
+    flex-shrink: 0;
+    font-family: "Playfair Display", serif;
+    font-weight: 700;
+    font-size: 16px;
+    color: #f5e9d8;
+}
+.pay-topbar span {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.pay-menu-btn {
+    width: 44px;
+    height: 44px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: "Poppins", sans-serif;
+    font-size: 20px;
+    line-height: 1;
+    color: #f5e9d8;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(201, 154, 91, 0.35);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.2s ease, color 0.2s ease;
+}
+.pay-menu-btn:hover {
+    background: #c99a5b;
+    color: #2a170c;
+}
+
+/* ---- Lớp phủ tối phía sau sidebar khi mở drawer ---- */
+.pay-scrim {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.45);
+    z-index: 40;
+}
+
+/* ---- Nội dung chính ---- */
+.pay-main {
+    flex: 1;
+    min-width: 0;
+    height: 100vh;
+    height: 100dvh;
+    overflow-y: auto;
+    box-sizing: border-box;
+    padding: 24px;
+    padding-bottom: calc(24px + env(safe-area-inset-bottom, 0px));
+    background: #f7f2ea;
+}
+
+/* ---- Header trang ---- */
+.pay-head h1 {
+    font-family: "Playfair Display", serif;
+    color: #3b2313;
+    font-size: 24px;
+    margin: 0 0 4px;
+}
+.pay-head p {
+    color: #9a8672;
+    font-size: 14px;
+    margin: 0 0 28px;
+}
+
+/* ---- Lưới 2 cột: đơn chờ (trái) + hóa đơn tạm (phải) ---- */
+.pay-grid {
+    display: grid;
+    grid-template-columns: minmax(260px, 340px) minmax(0, 1fr);
+    gap: 24px;
+    align-items: start;
+}
+
+.pay-orders,
+.pay-bill {
+    min-width: 0;
+    box-sizing: border-box;
+    padding: 20px;
+    background: #fff;
+    border: 1px solid #e0d3bd;
+    border-radius: 12px;
+}
+
+/* ---- Trạng thái trống ---- */
+.pay-empty {
+    text-align: center;
+    padding: 36px 16px;
+    color: #b3a48f;
+    font-size: 14px;
+    line-height: 1.5;
+    border: 1px dashed #e0d3bd;
+    border-radius: 10px;
+}
+/* Cột phải trống: đã nằm trong thẻ trắng nên bỏ viền để khỏi bị viền lồng viền */
+.pay-empty-big {
+    padding: 90px 20px;
+    border: none;
+}
+
+/* ---- Cột trái: danh sách đơn chờ thanh toán ---- */
+.pay-orders h2 {
+    font-family: "Poppins", sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+    color: #4a2a18;
+    margin: 0 0 14px;
+    padding-bottom: 6px;
+    border-bottom: 2px solid #c99a5b;
+    display: inline-block;
+}
+
+.pay-order-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+.pay-order-list li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 14px;
+    background: #fff;
+    border: 1px solid #e0d3bd;
+    border-radius: 10px;
+    color: #3b2313;
+    cursor: pointer;
+    transition: background 0.2s ease, border-color 0.2s ease;
+}
+.pay-order-list li:hover {
+    background: #f7f2ea;
+    border-color: #c99a5b;
+}
+/* Đơn đang được chọn — cùng kiểu với nút đang chọn ở sidebar */
+.pay-order-list li.active,
+.pay-order-list li.selected,
+.pay-order-list li[aria-selected="true"],
+.pay-order-list li[aria-current="true"] {
+    background: #c99a5b;
+    border-color: #c99a5b;
+    color: #2a170c;
+}
+/* Nếu mỗi <li> chỉ chứa một <button> thì bỏ kiểu mặc định của nút */
+.pay-order-list li > button:only-child {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    padding: 0;
+    font: inherit;
+    color: inherit;
+    text-align: left;
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+.pay-order-name {
+    font-weight: 600;
+    font-size: 15px;
+}
+.pay-order-meta {
+    font-size: 13px;
+    color: #a99a86;
+    margin-top: 2px;
+}
+.pay-order-total {
+    font-weight: 600;
+    font-size: 14px;
+    white-space: nowrap;
+}
+.pay-order-list li.active .pay-order-meta,
+.pay-order-list li.selected .pay-order-meta {
+    color: #4a2a18;
+}
+
+/* ---- Cột phải: hóa đơn tạm ---- */
+.pay-bill h2 {
+    font-family: "Playfair Display", serif;
+    font-size: 22px;
+    font-weight: 700;
+    color: #3b2313;
+    margin: 0 0 14px;
+}
+
+/* Bảng món */
+.pay-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 18px;
+}
+.pay-table th {
+    font-size: 12px;
+    font-weight: 600;
+    color: #9a8672;
+    text-align: left;
+    padding: 8px;
+    border-bottom: 2px solid #e0d3bd;
+}
+.pay-table td {
+    font-size: 14px;
+    color: #3b2313;
+    padding: 12px 8px;
+    border-bottom: 1px solid #ece2d3;
+    vertical-align: middle;
+}
+.pay-table tbody tr:last-child td {
+    border-bottom: none;
+}
+.pay-table .num {
+    text-align: right;
+    white-space: nowrap;
+    font-variant-numeric: tabular-nums;
+}
+.pay-table td small {
+    display: block;
+    font-size: 12px;
+    color: #a99a86;
+    margin-top: 2px;
+}
+.pay-table td input {
+    width: 56px;
+    box-sizing: border-box;
+    font-family: "Poppins", sans-serif;
+    font-size: 13px;
+    color: #3b2313;
+    text-align: right;
+    padding: 6px 8px;
+    border: 1px solid #e0d3bd;
+    border-radius: 6px;
+    background: #fff;
+}
+/* Nút trong bảng: mặc định viền nâu, nút ở cột cuối (xóa món) viền đỏ */
+.pay-table td button {
+    font-family: "Poppins", sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    line-height: 1.2;
+    padding: 6px 10px;
+    color: #7a5c3e;
+    background: transparent;
+    border: 1px solid #c99a5b;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.2s ease, color 0.2s ease;
+}
+.pay-table td button:hover {
+    background: #c99a5b;
+    color: #2a170c;
+}
+.pay-table td:last-child button {
+    color: #b5573c;
+    border-color: #c96a5b;
+}
+.pay-table td:last-child button:hover {
+    background: #c96a5b;
+    color: #fff;
+}
+
+/* Ẩn khỏi màn hình nhưng vẫn đọc được bằng screen reader */
+.pay-sr {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+/* Dòng giảm giá */
+.pay-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 16px;
+}
+.pay-row label {
+    font-size: 13px;
+    font-weight: 600;
+    color: #9a8672;
+}
+.pay-discount {
+    display: flex;
+    gap: 8px;
+}
+.pay-discount input {
+    width: 120px;
+    text-align: right;
+}
+
+/* Ô nhập dùng chung (giảm giá, tiền khách đưa) — cùng kiểu .form-group input */
+.pay-discount input,
+.pay-discount select,
+.pay-cash input {
+    box-sizing: border-box;
+    font-family: "Poppins", sans-serif;
+    font-size: 14px;
+    color: #3b2313;
+    padding: 10px 12px;
+    border: 1px solid #e0d3bd;
+    border-radius: 8px;
+    background: #fff;
+}
+.pay-discount input::placeholder,
+.pay-cash input::placeholder {
+    color: #c4b8a5;
+}
+.pay-discount input:focus,
+.pay-discount select:focus,
+.pay-cash input:focus,
+.pay-table td input:focus {
+    outline: none;
+    border-color: #c99a5b;
+    box-shadow: 0 0 0 3px rgba(201, 154, 91, 0.25);
+}
+
+/* Tổng kết tiền */
+.pay-sum {
+    margin: 0 0 20px;
+    padding-top: 10px;
+    border-top: 1px solid #ece2d3;
+}
+.pay-sum > div {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 12px;
+    padding: 6px 0;
+}
+.pay-sum dt {
+    font-size: 14px;
+    color: #7a5c3e;
+}
+.pay-sum dd {
+    margin: 0;
+    font-size: 14px;
+    font-weight: 600;
+    color: #3b2313;
+    font-variant-numeric: tabular-nums;
+}
+/* Khách cần trả — con số lớn nhất trang */
+.pay-sum .pay-total {
+    margin-top: 8px;
+    padding-top: 14px;
+    border-top: 2px solid #c99a5b;
+}
+.pay-sum .pay-total dt {
+    font-size: 15px;
+    font-weight: 600;
+    color: #4a2a18;
+}
+.pay-sum .pay-total dd {
+    font-family: "Playfair Display", serif;
+    font-size: 28px;
+    font-weight: 700;
+    color: #3b2313;
+}
+
+/* Phương thức thanh toán */
+.pay-methods {
+    min-width: 0;
+    margin: 0 0 16px;
+    padding: 0;
+    border: none;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+    gap: 8px;
+}
+.pay-methods legend {
+    padding: 0;
+    margin-bottom: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #9a8672;
+}
+.pay-method {
+    position: relative;
+    display: block;
+    cursor: pointer;
+}
+/* Ẩn nút radio thật nhưng vẫn focus được bằng bàn phím */
+.pay-method input {
+    position: absolute;
+    opacity: 0;
+    width: 1px;
+    height: 1px;
+    margin: 0;
+}
+.pay-method span {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    padding: 12px 10px;
+    font-size: 14px;
+    font-weight: 500;
+    color: #7a5c3e;
+    text-align: center;
+    background: #fff;
+    border: 1px solid #e0d3bd;
+    border-radius: 8px;
+    transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+}
+.pay-method:hover span {
+    border-color: #c99a5b;
+}
+/* Phương thức đang chọn — cùng kiểu nút đang chọn ở sidebar */
+.pay-method input:checked + span {
+    background: #c99a5b;
+    border-color: #c99a5b;
+    color: #2a170c;
+    font-weight: 600;
+}
+.pay-method input:focus-visible + span {
+    outline: 2px solid #c99a5b;
+    outline-offset: 2px;
+}
+
+/* Khung tiền mặt: khách đưa / tiền thối */
+.pay-cash {
+    margin-bottom: 16px;
+    padding: 16px;
+    background: #f7f2ea;
+    border: 1px solid #ece2d3;
+    border-radius: 10px;
+}
+.pay-cash label {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    color: #9a8672;
+    margin-bottom: 6px;
+}
+.pay-cash input {
+    width: 100%;
+}
+.pay-quick {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 10px 0;
+}
+.pay-quick:empty {
+    display: none;
+}
+.pay-quick button {
+    font-family: "Poppins", sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    padding: 7px 12px;
+    color: #7a5c3e;
+    background: #fff;
+    border: 1px solid #c99a5b;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.2s ease, color 0.2s ease;
+}
+.pay-quick button:hover {
+    background: #c99a5b;
+    color: #2a170c;
+}
+.pay-change {
+    margin: 4px 0 0;
+    font-size: 14px;
+    color: #7a5c3e;
+}
+.pay-change strong {
+    font-size: 16px;
+    font-weight: 700;
+    color: #3b2313;
+    font-variant-numeric: tabular-nums;
+}
+
+/* Gợi ý / cảnh báo dưới phương thức thanh toán */
+.pay-hint {
+    margin: 0 0 16px;
+    padding: 10px 14px;
+    font-size: 13px;
+    line-height: 1.5;
+    color: #4a2a18;
+    background: #f5e9d8;
+    border-left: 3px solid #c99a5b;
+    border-radius: 8px;
+}
+.pay-hint.error,
+.pay-hint.warn {
+    color: #b5573c;
+    background: #fbe9e3;
+    border-left-color: #c96a5b;
+}
+
+/* ---- Nút ---- */
+.pay-btn {
+    font-family: "Poppins", sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    padding: 9px 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+.pay-btn-line {
+    background: transparent;
+    border: 1px solid #c99a5b;
+    color: #7a5c3e;
+}
+.pay-btn-line:hover {
+    background: #c99a5b;
+    color: #2a170c;
+}
+.pay-btn-solid {
+    background: #3b2313;
+    border: 1px solid #3b2313;
+    color: #fff;
+}
+.pay-btn-solid:hover {
+    background: #4a2a18;
+    border-color: #4a2a18;
+}
+.pay-btn:disabled,
+.pay-confirm:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+.pay-btn-line:disabled:hover {
+    background: transparent;
+    color: #7a5c3e;
+}
+.pay-confirm:disabled:hover {
+    background: #3b2313;
+}
+
+/* Nút Xác nhận thanh toán — cùng kiểu .btn-submit */
+.pay-confirm {
+    width: 100%;
+    font-family: "Poppins", sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    color: #fff;
+    background: #3b2313;
+    border: none;
+    padding: 14px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+.pay-confirm:hover {
+    background: #4a2a18;
+}
+
+/* Hiện viền focus rõ khi dùng bàn phím */
+.pay-menu-btn:focus-visible,
+.pay-btn:focus-visible,
+.pay-confirm:focus-visible,
+.pay-quick button:focus-visible,
+.pay-table td button:focus-visible,
+.pay-toast button:focus-visible,
+.pay-order-list li:focus-visible,
+.pay-order-list li > button:focus-visible {
+    outline: 2px solid #c99a5b;
+    outline-offset: 2px;
+}
+
+/* ---- Thông báo sau khi xóa món (có nút Hoàn tác) ---- */
+.pay-toast {
+    position: fixed;
+    left: 50%;
+    bottom: calc(24px + env(safe-area-inset-bottom, 0px));
+    transform: translateX(-50%);
+    z-index: 60;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    max-width: calc(100vw - 32px);
+    box-sizing: border-box;
+    padding: 12px 16px;
+    font-family: "Poppins", sans-serif;
+    font-size: 14px;
+    color: #f5e9d8;
+    background: #3b2313;
+    border-radius: 10px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+    animation: pay-toast-in 0.2s ease;
+}
+.pay-toast button {
+    flex-shrink: 0;
+    font-family: "Poppins", sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    color: #c99a5b;
+    background: transparent;
+    border: 1px solid #c99a5b;
+    border-radius: 6px;
+    padding: 6px 12px;
+    cursor: pointer;
+    transition: background 0.2s ease, color 0.2s ease;
+}
+.pay-toast button:hover {
+    background: #c99a5b;
+    color: #2a170c;
+}
+@keyframes pay-toast-in {
+    from { opacity: 0; transform: translate(-50%, 8px); }
+    to   { opacity: 1; transform: translate(-50%, 0); }
+}
+
+/* ---- Hóa đơn sau khi thanh toán (popup) ---- */
+.pay-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 70;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+    box-sizing: border-box;
+    overflow-y: auto;
+    background: rgba(0, 0, 0, 0.45);
+    animation: pay-fade-in 0.15s ease;
+}
+.pay-receipt {
+    width: 100%;
+    max-width: 380px;
+    max-height: calc(100vh - 32px);
+    max-height: calc(100dvh - 32px);
+    display: flex;
+    flex-direction: column;
+    background: #fff;
+    border-radius: 12px;
+    overflow: hidden;
+    font-family: "Poppins", sans-serif;
+    animation: pay-receipt-in 0.2s ease;
+}
+#payReceipt {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    padding: 24px 22px 12px;
+    font-size: 13px;
+    color: #3b2313;
+}
+#payReceipt h1,
+#payReceipt h2,
+#payReceipt h3 {
+    font-family: "Playfair Display", serif;
+    color: #3b2313;
+    text-align: center;
+    margin: 0 0 4px;
+}
+#payReceipt h2 { font-size: 20px; }
+#payReceipt h3 { font-size: 16px; }
+#payReceipt p {
+    margin: 2px 0;
+    font-size: 12px;
+    color: #9a8672;
+    text-align: center;
+}
+#payReceipt hr {
+    border: none;
+    border-top: 1px dashed #c4b8a5;
+    margin: 14px 0;
+}
+#payReceipt table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 8px 0;
+}
+#payReceipt th {
+    font-size: 12px;
+    font-weight: 600;
+    color: #9a8672;
+    text-align: left;
+    padding: 4px 0;
+    border-bottom: 1px dashed #c4b8a5;
+}
+#payReceipt td {
+    padding: 5px 0;
+    vertical-align: top;
+}
+#payReceipt .num {
+    text-align: right;
+    white-space: nowrap;
+    font-variant-numeric: tabular-nums;
+}
+#payReceipt dl {
+    margin: 8px 0;
+}
+#payReceipt dl > div {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 3px 0;
+}
+#payReceipt dt {
+    color: #7a5c3e;
+}
+#payReceipt dd {
+    margin: 0;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+}
+.pay-receipt-actions {
+    display: flex;
+    gap: 10px;
+    padding: 14px 20px;
+    padding-bottom: calc(14px + env(safe-area-inset-bottom, 0px));
+    background: #faf6ef;
+    border-top: 1px dashed #e0d3bd;
+}
+.pay-receipt-actions .pay-btn {
+    flex: 1;
+    padding: 12px 16px;
+}
+@keyframes pay-fade-in {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+@keyframes pay-receipt-in {
+    from { opacity: 0; transform: translateY(8px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ---- iPad dọc & điện thoại: sidebar thành drawer trượt, hiện topbar ---- */
+@media (max-width: 900px) {
+    .pay-app {
+        flex-direction: column;
+    }
+
+    .pay-topbar {
+        display: flex;
+    }
+
+    .pay-main {
+        flex: 1;
+        min-height: 0;
+        height: auto;
+        padding: 16px;
+        padding-bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+    }
+
+    /* Ghi đè sidebar mặc định (vì Pay.html thu gọn sớm hơn mốc 768px) */
+    .pay-body .sidebar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 80vw;
+        max-width: 300px;
+        height: 100vh;
+        height: 100dvh;
+        z-index: 50;
+        transform: translateX(-100%);
+        visibility: hidden; /* drawer đóng thì không cho Tab vào các link bên trong */
+        transition: transform 0.25s ease, visibility 0s linear 0.25s;
+        box-shadow: 4px 0 24px rgba(0, 0, 0, 0.35);
+    }
+    .pay-body .sidebar.open {
+        transform: translateX(0);
+        visibility: visible;
+        transition: transform 0.25s ease, visibility 0s;
+    }
+
+    .pay-scrim.active,
+    .pay-scrim.show,
+    .pay-scrim.open {
+        display: block;
+    }
+}
+
+/* ---- Màn hình hẹp: xếp 1 cột, danh sách đơn cuộn ngang phía trên hóa đơn ---- */
+@media (max-width: 720px) {
+    .pay-grid {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 16px;
+    }
+
+    .pay-order-list {
+        flex-direction: row;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        padding-bottom: 4px;
+    }
+    .pay-order-list li {
+        flex: 0 0 auto;
+        min-width: 160px;
+    }
+
+    .pay-head h1 {
+        font-size: 20px;
+    }
+    .pay-head p {
+        margin-bottom: 20px;
+    }
+}
+
+/* ---- Màn hình rất nhỏ ---- */
+@media (max-width: 640px) {
+    .pay-orders,
+    .pay-bill {
+        padding: 16px;
+    }
+
+    .pay-sum .pay-total dd {
+        font-size: 24px;
+    }
+
+    .pay-toast {
+        left: 16px;
+        right: 16px;
+        transform: none;
+        justify-content: space-between;
+        animation-name: pay-fade-in;
+    }
+}
+
+@media (max-width: 480px) {
+    /* Ẩn cột "Đơn giá" cho bảng món khỏi bị chật, vẫn còn cột Thành tiền */
+    .pay-table th:nth-child(3),
+    .pay-table td:nth-child(3) {
+        display: none;
+    }
+    .pay-table th,
+    .pay-table td {
+        padding-left: 4px;
+        padding-right: 4px;
+    }
+    .pay-table td {
+        font-size: 13px;
+    }
+}
+
+@media (max-width: 400px) {
+    .pay-topbar {
+        font-size: 14px;
+    }
+}
+
+/* ---- Máy cảm ứng (iPad, điện thoại): nút và ô nhập đủ to để bấm ---- */
+@media (pointer: coarse) {
+    .pay-btn,
+    .pay-quick button,
+    .pay-table td button,
+    .pay-toast button {
+        min-height: 44px;
+    }
+    .pay-discount input,
+    .pay-discount select,
+    .pay-cash input {
+        min-height: 44px;
+    }
+    .pay-method span {
+        min-height: 48px;
+    }
+}
+
+/* ---- Người dùng tắt hiệu ứng chuyển động ---- */
+@media (prefers-reduced-motion: reduce) {
+    .pay-toast,
+    .pay-modal,
+    .pay-receipt {
+        animation: none;
+    }
+    .pay-body .sidebar,
+    .pay-body .sidebar.open {
+        transition: none;
+    }
+}
+
+/* ---- In hóa đơn: chỉ in nội dung hóa đơn (khổ 80mm), ẩn phần còn lại ---- */
+@media print {
+    html,
+    body {
+        height: auto !important;
+        overflow: visible !important;
+    }
+    .pay-body {
+        display: block;
+        background: #fff;
+    }
+    .pay-app,
+    .pay-toast,
+    .pay-receipt-actions {
+        display: none !important;
+    }
+    .pay-modal {
+        position: static;
+        display: block;
+        padding: 0;
+        overflow: visible;
+        background: none;
+        animation: none;
+    }
+    .pay-receipt {
+        max-width: 80mm;
+        max-height: none;
+        margin: 0 auto;
+        border-radius: 0;
+        overflow: visible;
+        animation: none;
+    }
+    #payReceipt {
+        overflow: visible;
+        padding: 0;
+    }
+}
