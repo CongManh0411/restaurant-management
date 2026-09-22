@@ -47,3 +47,14 @@
     line-height: 1.6;
     margin: 12px 0 0;
 }
+
+/* ============================================================
+   TAB KHO: chỉ hiển thị panel đang được chọn
+   ============================================================ */
+.tab-panel {
+    display: none;
+}
+
+.tab-panel.active {
+    display: block;
+}
