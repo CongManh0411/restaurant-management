@@ -22,15 +22,14 @@
                 <button class="topnav-item active" onclick="filterTables('all')">Tất cả bàn</button>
                 <button class="topnav-item" onclick="filterTables('empty')">Bàn trống</button>
                 <button class="topnav-item" onclick="filterTables('occupied')">Đang phục vụ</button>
-                <button class="topnav-item" onclick="filterTables('pending')">Chờ thanh toán</button>
             </div>
-
+ 
             <div class="main-content">
-                <h2 style="font-family: 'Playfair Display', serif; color: #3b2313; margin-bottom: 20px;">Sơ Đồ Bàn</h2>
+                <h2 class="tables-title">Sơ Đồ Bàn</h2>
                 <div id="tablesGrid" class="tables-grid"></div>
             </div>
         </div>
-
+ 
         <!-- VIEW 2: MENU GỌI MÓN & HÓA ĐƠN TẠM TÍNH -->
         <div id="view-menu" class="view-panel">
             <div class="topnav">
@@ -43,55 +42,55 @@
                 <button class="topnav-item" onclick="filterCategory('milktea')">Trà Sữa</button>
                 <button class="topnav-item" onclick="filterCategory('soft')">Nước Ngọt</button>
             </div>
-
+ 
             <div class="main-content">
                 <!-- Cảnh báo khi chưa chọn bàn -->
                 <div id="no-table-warning" class="menu-empty-state">
                     <div class="empty-icon"><i class="fa-solid fa-chair"></i></div>
                     <div>Vui lòng chọn bàn từ <b>Sơ Đồ Bàn</b> để bắt đầu gọi món!</div>
                 </div>
-
+ 
                 <!-- Màn hình Order 2 cột (Menu dòng bên trái + Bill bên phải) -->
-                <div id="order-screen" style="display: none;">
+                <div id="order-screen" class="order-screen">
                     <div class="order-layout-container">
                         
                         <!-- CỘT TRÁI: DÒNG MENU DẠNG ADMIN -->
                         <div class="menu-section">
                             <div id="menuGrid" class="menu-grid"></div>
                         </div>
-
+ 
                         <!-- CỘT PHẢI: HÓA ĐƠN TẠM TÍNH -->
                         <div class="bill-section">
-                            <div style="display: flex; justify-content: space-between; align-items: baseline;">
-                                <h3 id="currentTableTitle" style="font-family: 'Playfair Display', serif; font-size: 20px; color: #3b2313; margin: 0;">Chưa chọn bàn</h3>
-                                <span id="currentInvoiceId" style="font-size: 12px; color: #8c735d;">Mã HD: --</span>
+                            <div class="bill-header">
+                                <h3 id="currentTableTitle" class="current-table-title">Chưa chọn bàn</h3>
+                                <span id="currentInvoiceId" class="current-invoice-id">Mã HD: --</span>
                             </div>
-
-                            <hr style="border: none; border-top: 1px dashed #c99a5b; margin: 12px 0;">
-
-                            <div style="font-weight: 600; font-size: 13px; color: #4a2a18; margin-bottom: 8px;">Món đã chọn:</div>
+ 
+                            <hr class="bill-divider-dashed">
+ 
+                            <div class="selected-items-title">Món đã chọn:</div>
                             <div id="billItems" class="bill-items-container">
-                                <div style="font-size: 13px; color: #8c735d; text-align: center; padding: 20px 0;">Chưa chọn món nào</div>
+                                <div class="bill-empty">Chưa chọn món nào</div>
                             </div>
-
-                            <hr style="border: none; border-top: 1px solid #f2e9dc; margin: 12px 0;">
-
-                            <div style="display: flex; justify-content: space-between; align-items: center; font-weight: 700; font-size: 16px; color: #3b2313;">
+ 
+                            <hr class="bill-divider">
+ 
+                            <div class="bill-total">
                                 <span>Tạm tính:</span>
-                                <span id="totalAmount" style="color: #c99a5b;">0 đ</span>
+                                <span id="totalAmount" class="total-amount">0 đ</span>
                             </div>
-
-                            <!-- NÚT GỬI PHA CHẾ & BÁO THU NGÂN -->
-                            <div id="billActions" style="margin-top: 16px; display: flex; flex-direction: column; gap: 8px;">
-                                <button class="btn-submit" disabled style="opacity: 0.5;">Gửi Pha Chế</button>
+ 
+                            <!-- NÚT XÁC NHẬN GỬI THU NGÂN -->
+                            <div id="billActions" class="bill-actions">
+                                <button class="btn-submit" disabled>Xác nhận</button>
                             </div>
                         </div>
-
+ 
                     </div>
                 </div>
             </div>
         </div>
-
+ 
     
 </div>
 </main>

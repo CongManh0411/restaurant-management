@@ -1,4 +1,24 @@
 /* ============================================================
+   TRANG BÀN — Sơ Đồ Bàn & Gọi món (Table.html)
+   Cần nạp base.css trước file này (dùng chung .menu-empty-state,
+   .btn-outline, .btn-danger...).
+   ============================================================ */
+
+/* Tiêu đề Sơ Đồ Bàn */
+.tables-title {
+    font-family: 'Playfair Display', serif;
+    color: #3b2313;
+    margin-bottom: 20px;
+}
+
+/* Khu vực order */
+.order-screen {
+    display: none;
+}
+
+/* Header hóa đơn *
+Table order · CSS
+/* ============================================================
    TABLE.CSS
    TRANG BÀN — Sơ Đồ Bàn & Gọi món (Table.html)
    Cần nạp base.css trước file này (dùng chung .menu-empty-state,
@@ -224,10 +244,338 @@
     padding: 8px 0;
     border-bottom: 1px dashed #f2e9dc;
 }
+#order-app .bill-item-name {
+    font-size: 14px;
+    font-weight: 600;
+    color: #3b2313;
+}
+#order-app .bill-item-tag {
+    font-size: 11px;
+    font-weight: 500;
+    color: #8c735d;
+}
+#order-app .bill-item-meta {
+    font-size: 12px;
+    color: #8c735d;
+}
 #order-app .qty-control {
     display: flex;
     align-items: center;
     gap: 6px;
+}
+#order-app .qty-value {
+    font-weight: 600;
+    font-size: 13px;
+    min-width: 16px;
+    text-align: center;
+}
+/* Món đã bấm Xác nhận (khóa, không sửa +/- được nữa) */
+#order-app .qty-locked {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-weight: 600;
+    font-size: 13px;
+    color: #8c735d;
+}
+#order-app .btn-qty {
+    width: 24px;
+    height: 24px;
+    border: 1px solid #c99a5b;
+    background: #fff;
+    border-radius: 4px;
+    font-weight: 600;
+    cursor: pointer;
+}
+#order-app .btn-submit {
+    width: 100%;
+    font-family: "Poppins", sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    color: #fff;
+    background: #3b2313;
+    border: none;
+    padding: 10px;
+    border-radius: 8px;
+    cursor: pointer;
+}
+#order-app .btn-checkout {
+    width: 100%;
+    font-family: "Poppins", sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    color: #fff;
+    background: #c99a5b;
+    border: none;
+    padding: 10px;
+    border-radius: 8px;
+    cursor: pointer;
+}
+#order-app .view-panel { display: none; }
+#order-app .view-panel.active { display: block; }
+#order-app .menu-empty-state { text-align: center; padding: 60px 20px; background: #fff; border: 1px dashed #c99a5b; border-radius: 12px; }
+#order-app .empty-icon { font-size: 36px; color: #c99a5b; margin-bottom: 10px; }
+
+/* Nút quay lại sơ đồ bàn (thanh trên của màn gọi món) */
+#order-app .topnav-back {
+    align-self: center;
+    margin: 0 16px 4px 0;
+    padding: 8px 14px;
+    font-family: "Poppins", sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    color: #4a2a18;
+    background: #ffffff;
+    border: 1px solid #c99a5b;
+    border-radius: 8px;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background 0.2s ease, color 0.2s ease;
+}
+#order-app .topnav-back:hover { background: #c99a5b; color: #ffffff; }
+#order-app .topnav-back:focus-visible { outline: 2px solid #3b2313; outline-offset: 2px; }
+#order-app .topnav-back i { margin-right: 6px; }
+#order-app .tables-empty { grid-column: 1 / -1; text-align: center; padding: 50px 20px; color: #b3a48f; font-size: 14px; background: #fff; border: 1px dashed #c99a5b; border-radius: 12px; }
+
+.bill-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+}
+
+.current-table-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 20px;
+    color: #3b2313;
+    margin: 0;
+}
+
+.current-invoice-id {
+    font-size: 12px;
+    color: #8c735d;
+}
+
+/* Đường kẻ trong hóa đơn */
+.bill-divider-dashed {
+    border: none;
+    border-top: 1px dashed #c99a5b;
+    margin: 12px 0;
+}
+
+.bill-divider {
+    border: none;
+    border-top: 1px solid #f2e9dc;
+    margin: 12px 0;
+}
+
+/* Danh sách món */
+.selected-items-title {
+    font-weight: 600;
+    font-size: 13px;
+    color: #4a2a18;
+    margin-bottom: 8px;
+}
+
+.bill-empty {
+    font-size: 13px;
+    color: #8c735d;
+    text-align: center;
+    padding: 20px 0;
+}
+
+/* Tổng tiền */
+.bill-total {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: 700;
+    font-size: 16px;
+    color: #3b2313;
+}
+
+.total-amount {
+    color: #c99a5b;
+}
+
+/* Nút gửi pha chế */
+.bill-actions {
+    margin-top: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.btn-submit:disabled {
+    opacity: 0.5;
+}
+/* Giao dien trang Ban/Order (lay tu nhan-vien/style.css, gioi han trong #order-app) */
+#order-app .tables-grid {
+    display: grid !important;
+    grid-template-columns: repeat(4, 1fr) !important;
+    gap: 16px;
+}
+#order-app .table-card {
+    border: 1px solid #c99a5b;
+    border-radius: 10px;
+    padding: 22px 12px;
+    cursor: pointer;
+    text-align: center;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.03);
+    transition: transform 0.15s ease;
+}
+#order-app .table-card:hover {
+    transform: translateY(-2px);
+}
+#order-app .table-card.empty { background: #ffffff; }
+#order-app .table-card.occupied { background: #f5e9d8; }
+#order-app .table-card.pending { background: #fbe9e3; border-color: #c96a5b; }
+#order-app .table-card-name {
+    font-family: "Playfair Display", serif;
+    font-weight: 700;
+    font-size: 18px;
+    color: #3b2313;
+}
+#order-app .table-card-status {
+    font-size: 13px;
+    font-weight: 600;
+    color: #4a2a18;
+    margin-top: 8px;
+}
+#order-app .table-card-time {
+    font-size: 12px;
+    color: #7a5c3e;
+    margin-top: 6px;
+}
+#order-app .order-layout-container {
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
+}
+#order-app .menu-section {
+    flex: 1;
+    min-width: 0;
+}
+#order-app .menu-grid {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 0 !important;
+    background: #ffffff;
+    border: 1px solid #e0d3bd;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+#order-app .menu-item {
+    display: flex !important;
+    flex-direction: row !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    padding: 14px 20px !important;
+    border-bottom: 1px solid #f2e9dc !important;
+    background: #ffffff;
+}
+#order-app .menu-item:last-child {
+    border-bottom: none !important;
+}
+#order-app .menu-item:hover {
+    background-color: #fcf9f5;
+}
+#order-app .menu-item-info {
+    flex: 1;
+    padding-right: 16px;
+}
+#order-app .menu-item-name {
+    font-family: "Poppins", sans-serif;
+    font-weight: 600;
+    font-size: 15px;
+    color: #3b2313;
+}
+#order-app .menu-item-desc {
+    font-size: 12px;
+    color: #8c735d;
+    margin-top: 3px;
+}
+#order-app .menu-item-action {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-shrink: 0;
+}
+#order-app .menu-item-price {
+    font-weight: 700;
+    font-size: 14px;
+    color: #3b2313;
+}
+#order-app .btn-add-item {
+    background: #ffffff;
+    border: 1px solid #c99a5b;
+    color: #4a2a18;
+    padding: 6px 14px;
+    border-radius: 6px;
+    font-weight: 600;
+    font-size: 13px;
+    cursor: pointer;
+}
+#order-app .btn-add-item:hover {
+    background: #c99a5b;
+    color: #ffffff;
+}
+#order-app .bill-section {
+    width: 360px;
+    flex-shrink: 0;
+    background: #ffffff;
+    border: 1px solid #c99a5b;
+    border-radius: 12px;
+    padding: 18px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    position: sticky;
+    top: 20px;
+}
+#order-app .bill-items-container {
+    max-height: 320px;
+    overflow-y: auto;
+    margin: 10px 0;
+}
+#order-app .bill-item-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0;
+    border-bottom: 1px dashed #f2e9dc;
+}
+#order-app .bill-item-name {
+    font-size: 14px;
+    font-weight: 600;
+    color: #3b2313;
+}
+#order-app .bill-item-tag {
+    font-size: 11px;
+    font-weight: 500;
+    color: #8c735d;
+}
+#order-app .bill-item-meta {
+    font-size: 12px;
+    color: #8c735d;
+}
+#order-app .qty-control {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+#order-app .qty-value {
+    font-weight: 600;
+    font-size: 13px;
+    min-width: 16px;
+    text-align: center;
+}
+/* Món đã bấm Xác nhận (khóa, không sửa +/- được nữa) */
+#order-app .qty-locked {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-weight: 600;
+    font-size: 13px;
+    color: #8c735d;
 }
 #order-app .btn-qty {
     width: 24px;
