@@ -46,7 +46,7 @@
 
             <table class="pay-table">
               <thead>
-                <tr><th>Món</th><th class="num">SL</th><th class="num">Đơn giá</th><th class="num">Thành tiền</th><th class="num"><span class="pay-sr">Thao tác</span></th></tr>
+                <tr><th>Món</th><th class="num">SL</th><th class="num">Đơn giá</th><th class="num">Thành tiền</th></tr>
               </thead>
               <tbody id="payItems"></tbody>
             </table>
@@ -70,10 +70,7 @@
 
             <fieldset class="pay-methods">
               <legend>Phương thức thanh toán</legend>
-              <label class="pay-method"><input type="radio" name="payMethod" value="cash" checked><span>Tiền mặt</span></label>
-              <label class="pay-method"><input type="radio" name="payMethod" value="transfer"><span>Chuyển khoản</span></label>
-              <label class="pay-method"><input type="radio" name="payMethod" value="card"><span>Thẻ</span></label>
-              <label class="pay-method"><input type="radio" name="payMethod" value="ewallet"><span>Ví điện tử</span></label>
+              <p class="pay-method-fixed">Tiền mặt</p>
             </fieldset>
 
             <div id="payCashBox" class="pay-cash">
@@ -90,12 +87,6 @@
         </section>
       </div>
     </main>
-  </div>
-
-  <!-- Thông báo sau khi xóa món, có nút hoàn tác -->
-  <div id="payToast" class="pay-toast" role="status" hidden>
-    <span id="payToastMsg"></span>
-    <button type="button" id="payUndo">Hoàn tác</button>
   </div>
 
   <!-- Hóa đơn sau khi thanh toán -->
@@ -121,4 +112,3 @@
   <script src="asset/js/pay.js"></script>
 </body>
 </html>
- 
