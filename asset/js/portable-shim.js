@@ -1,4 +1,44 @@
 // portable-shim.js - chay web bang cach bam dup (file://), khong can server.
 // Chi thay fetch('sidebar.html') bang noi dung nhung san. Khong dung logic nao khac.
-(function(){var SIDEBAR="<!-- File này chỉ chứa sidebar, sẽ được nạp vào mọi trang bằng JS (xem script.js).\n     Muốn đổi logo, tên... chỉ cần sửa DUY NHẤT file này.\n     Riêng các mục menu được script.js vẽ theo vai trò (xem MENU_ITEMS_BY_ROLE trong script.js). -->\n<aside class=\"sidebar\">\n    <!-- Logo + tên quán -->\n    <div class=\"sidebar-shop\">\n        <img src=\"asset/images/images.jpg\" alt=\"Coffee Logo\" class=\"shop-logo\" id=\"shopLogo\">\n    </div>\n \n    <!-- User đang đăng nhập + chức vụ — nội dung \"Tên\"/\"Chức vụ\" chỉ là mặc định,\n         sẽ được script.js (UserAPI) ghi đè bằng dữ liệu thật khi trang tải xong. -->\n    <div class=\"sidebar-user\">\n        <div class=\"user-name\" id=\"userName\">Tên</div>\n        <div class=\"user-role\" id=\"userRole\">Chức vụ</div>\n    </div>\n \n    <div class=\"sidebar-nav\">\n        <div class=\"sidebar-menu\">\n            <div class=\"sidebar-menu\" id=\"sidebarMenu\"></div>\n        </div>\n    </div>\n \n    <!-- Đăng xuất — luôn nằm ở đáy sidebar nhờ margin-top:auto trong CSS -->\n    <div class=\"sidebar-footer\">\n        <button type=\"button\" class=\"btn-logout\" id=\"btnLogout\">\n            <i class=\"ri-logout-box-r-line\"></i>\n            Đăng xuất\n        </button>\n    </div>\n</aside>\n \n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n";var f=window.fetch;
-window.fetch=function(u){if(String(u).split('?')[0].endsWith('sidebar.html')){return Promise.resolve(new Response(SIDEBAR));}return f.apply(this,arguments);};})();
+(function () {
+    const SIDEBAR = `<!-- File này chỉ chứa sidebar, sẽ được nạp vào mọi trang bằng JS .
+     Muốn đổi logo, tên... chỉ cần sửa DUY NHẤT file này.
+     Riêng các mục menu được script.js vẽ theo vai trò). -->
+<aside class="sidebar">
+    <!-- Logo + tên quán -->
+    <div class="sidebar-shop">
+        <img src="asset/images/images.jpg" alt="Coffee Logo" class="shop-logo" id="shopLogo">
+    </div>
+
+    <!-- User đang đăng nhập + chức vụ — nội dung "Tên"/"Chức vụ" chỉ là mặc định,
+         sẽ được script.js (UserAPI) ghi đè bằng dữ liệu thật khi trang tải xong. -->
+    <div class="sidebar-user">
+        <div class="user-name" id="userName">Tên</div>
+        <div class="user-role" id="userRole">Chức vụ</div>
+    </div>
+
+    <div class="sidebar-nav">
+        <div class="sidebar-menu">
+            <div class="sidebar-menu" id="sidebarMenu"></div>
+        </div>
+    </div>
+
+    <!-- Đăng xuất — luôn nằm ở đáy sidebar nhờ margin-top:auto trong CSS -->
+    <div class="sidebar-footer">
+        <button type="button" class="btn-logout" id="btnLogout">
+            <i class="ri-logout-box-r-line"></i>
+            Đăng xuất
+        </button>
+    </div>
+</aside>
+`;
+
+    const originalFetch = window.fetch;
+
+    window.fetch = function (url) {
+        if (String(url).split('?')[0].endsWith('sidebar.html')) {
+            return Promise.resolve(new Response(SIDEBAR));
+        }
+        return originalFetch.apply(this, arguments);
+    };
+})();
