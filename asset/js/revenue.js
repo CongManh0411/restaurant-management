@@ -68,41 +68,35 @@ function render() {
     document.getElementById('statAvgInvoice').innerText = fmtMoney(active.length ? totalRevenue / active.length : 0);
     document.getElementById('statCancelled').innerText = `${cancelled.length} hóa đơn — ${fmtMoney(cancelledTotal)}`;
 
-    // Theo phương thức (chỉ tính hóa đơn còn hiệu lực)
-    const byMethod = { cash: 0, transfer: 0, card: 0 };
-    active.forEach(i => { byMethod[i.paymentMethod] = (byMethod[i.paymentMethod] || 0) + i.total; });
-    const maxMethod = Math.max(byMethod.cash, byMethod.transfer, byMethod.card, 1);
+    // Theo phương thức (chỉ tính hóa đơn còn hiệu lực) — hiện chỉ còn "Tiền mặt"
+    const cashTotal = active.reduce((s, i) => s + i.total, 0);
+    const cashPct = totalRevenue ? Math.round(cashTotal / totalRevenue * 100) : 0;
 
-    document.getElementById('pmCashAmount').innerText = `${fmtMoney(byMethod.cash)} (${totalRevenue ? Math.round(byMethod.cash / totalRevenue * 100) : 0}%)`;
-    document.getElementById('pmTransferAmount').innerText = `${fmtMoney(byMethod.transfer)} (${totalRevenue ? Math.round(byMethod.transfer / totalRevenue * 100) : 0}%)`;
-    document.getElementById('pmCardAmount').innerText = `${fmtMoney(byMethod.card)} (${totalRevenue ? Math.round(byMethod.card / totalRevenue * 100) : 0}%)`;
-    document.getElementById('pmCashBar').style.width = `${byMethod.cash / maxMethod * 100}%`;
-    document.getElementById('pmTransferBar').style.width = `${byMethod.transfer / maxMethod * 100}%`;
-    document.getElementById('pmCardBar').style.width = `${byMethod.card / maxMethod * 100}%`;
+    document.getElementById('pmCashAmount').innerText = `${fmtMoney(cashTotal)} (${cashPct}%)`;
+    document.getElementById('pmCashBar').style.width = `${cashPct}%`;
 
     // Bảng theo ngày (chỉ tính hóa đơn còn hiệu lực, nhóm theo ngày, mới nhất trước)
+    // Bảng có 4 cột: Ngày | Số hóa đơn | Tiền mặt | Tổng
     const byDay = {};
     active.forEach(i => {
         const d = new Date(i.createdAt);
         const key = d.toLocaleDateString('vi-VN');
-        if (!byDay[key]) byDay[key] = { count: 0, cash: 0, transfer: 0, card: 0, total: 0, sortKey: startOfDay(d).getTime() };
+        if (!byDay[key]) byDay[key] = { count: 0, cash: 0, total: 0, sortKey: startOfDay(d).getTime() };
         byDay[key].count++;
-        byDay[key][i.paymentMethod] += i.total;
+        byDay[key].cash += i.total;   // hiện chỉ còn thanh toán tiền mặt
         byDay[key].total += i.total;
     });
     const days = Object.entries(byDay).sort((a, b) => b[1].sortKey - a[1].sortKey);
 
     const tbody = document.getElementById('dailyTableBody');
     if (days.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="6"><div class="empty-table-state">Chưa có dữ liệu trong khoảng thời gian này.</div></td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="4"><div class="empty-table-state">Chưa có dữ liệu trong khoảng thời gian này.</div></td></tr>`;
     } else {
         tbody.innerHTML = days.map(([date, d]) => `
             <tr>
                 <td><b>${date}</b></td>
                 <td>${d.count}</td>
                 <td>${fmtMoney(d.cash)}</td>
-                <td>${fmtMoney(d.transfer)}</td>
-                <td>${fmtMoney(d.card)}</td>
                 <td><b>${fmtMoney(d.total)}</b></td>
             </tr>
         `).join('');
@@ -131,4 +125,4 @@ window.addEventListener('storage', (e) => {
     if (e.key === LS_INVOICES_KEY) render();
 });
 
-render();
+render();       

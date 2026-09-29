@@ -23,9 +23,9 @@ const STAFF_KEY = 'coffee_staff_v1';
 function loadStaff() {
     try { const s = JSON.parse(localStorage.getItem(STAFF_KEY)); if (Array.isArray(s) && s.length) return s; } catch (e) {}
     return [
-        { id: 1, fullName: 'Nguyễn Văn A', username: 'quanly',  password: '123456', role: 'Quản lý' },
-        { id: 2, fullName: 'Trần Thị B',   username: 'thungan', password: '123456', role: 'Thu ngân' },
-        { id: 3, fullName: 'Lê Văn C',     username: 'phucvu',  password: '123456', role: 'Phục vụ' }
+        { id: 1, fullName: 'Nguyễn Văn A', username: 'quanly',  password: '123456', role: 'Quản lý',  phone: '', email: '', hireDate: '' },
+        { id: 2, fullName: 'Trần Thị B',   username: 'thungan', password: '123456', role: 'Thu ngân', phone: '', email: '', hireDate: '' },
+        { id: 3, fullName: 'Lê Văn C',     username: 'phucvu',  password: '123456', role: 'Phục vụ',  phone: '', email: '', hireDate: '' }
     ];
 }
 function saveStaff() { try { localStorage.setItem(STAFF_KEY, JSON.stringify(staffList)); } catch (e) {} }
@@ -46,6 +46,13 @@ function initStaffManagement() {
 }
 
 // ==================== Render Functions ====================
+function formatDate(iso) {
+    // '2026-09-29' -> '29/09/2026'
+    if (!iso) return '';
+    const p = String(iso).split('-');
+    return p.length === 3 ? p[2] + '/' + p[1] + '/' + p[0] : iso;
+}
+
 function renderStaffList() {
     saveStaff();
     const staffListContainer = document.getElementById('staffList');
@@ -55,11 +62,18 @@ function renderStaffList() {
         return;
     }
 
-    staffListContainer.innerHTML = staffList.map(staff => `
+    staffListContainer.innerHTML = staffList.map(staff => {
+        const contact = [];
+        if (staff.phone)    contact.push('📞 ' + escapeHtml(staff.phone));
+        if (staff.email)    contact.push('✉️ ' + escapeHtml(staff.email));
+        if (staff.hireDate) contact.push('📅 Vào làm: ' + escapeHtml(formatDate(staff.hireDate)));
+
+        return `
         <div class="staff-item">
             <div class="staff-info">
                 <div class="staff-name">${escapeHtml(staff.fullName)}</div>
                 <div class="staff-username">@${escapeHtml(staff.username)}</div>
+                ${contact.length ? `<div class="staff-contact">${contact.join(' &nbsp;·&nbsp; ')}</div>` : ''}
             </div>
             <div class="staff-actions">
                 <div class="staff-role">${escapeHtml(staff.role)}</div>
@@ -69,7 +83,8 @@ function renderStaffList() {
                 </div>
             </div>
         </div>
-    `).join('');
+    `;
+    }).join('');
 }
 
 // ==================== Form Handling ====================
@@ -80,9 +95,22 @@ function handleFormSubmit(e) {
     const username = document.getElementById('username').value.trim();
     const password = document.getElementById('password').value.trim();
     const role = document.getElementById('role').value;
+    const phone = document.getElementById('phone').value.trim();
+    const email = document.getElementById('email').value.trim();
+    const hireDate = document.getElementById('hireDate').value;
 
     if (!fullName || !username || !password || !role) {
         alert('Vui lòng điền đầy đủ thông tin!');
+        return;
+    }
+
+    if (phone && !/^[0-9]{9,11}$/.test(phone)) {
+        alert('Số điện thoại chỉ gồm 9-11 chữ số.');
+        return;
+    }
+
+    if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        alert('Email không hợp lệ.');
         return;
     }
 
@@ -94,10 +122,10 @@ function handleFormSubmit(e) {
     if (currentEditingId !== null) {
         const staffIndex = staffList.findIndex(s => s.id === currentEditingId);
         if (staffIndex !== -1) {
-            staffList[staffIndex] = { ...staffList[staffIndex], fullName, username, password, role };
+            staffList[staffIndex] = { ...staffList[staffIndex], fullName, username, password, role, phone, email, hireDate };
         }
     } else {
-        staffList.push({ id: nextId++, fullName, username, password, role });
+        staffList.push({ id: nextId++, fullName, username, password, role, phone, email, hireDate });
     }
 
     resetForm();
@@ -123,6 +151,9 @@ function editStaff(id) {
     document.getElementById('username').value = staff.username;
     document.getElementById('password').value = staff.password;
     document.getElementById('role').value = staff.role;
+    document.getElementById('phone').value = staff.phone || '';
+    document.getElementById('email').value = staff.email || '';
+    document.getElementById('hireDate').value = staff.hireDate || '';
 
     document.getElementById('submitBtn').textContent = 'Lưu thay đổi';
     document.getElementById('staffFormTitle').textContent = 'Sửa nhân viên';
@@ -145,8 +176,8 @@ function deleteStaff(id) {
 // ==================== Utility Functions ====================
 function escapeHtml(text) {
     const map = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' };
-    return text.replace(/[&<>"']/g, m => map[m]);
+    return String(text == null ? '' : text).replace(/[&<>"']/g, m => map[m]);
 }
 
 // ==================== Initialize on Page Load ====================
-document.addEventListener('DOMContentLoaded', initStaffManagement); 
+document.addEventListener('DOMContentLoaded', initStaffManagement);
