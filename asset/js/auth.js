@@ -74,8 +74,11 @@ function getAllAccounts() {
     return DEMO_ACCOUNTS.concat(extra);
 }
 
-// ---- 3) NƠI LƯU PHIÊN ĐĂNG NHẬP (BẢN DEMO: localStorage) ----
+// ---- 3) NƠI LƯU PHIÊN ĐĂNG NHẬP (BẢN DEMO: sessionStorage) ----
 const AUTH_STORAGE_KEY = 'coffee_auth_session_v1'; // lưu { roleKey, name }
+// Nơi lưu phiên: sessionStorage = mất khi đóng tab/trình duyệt.
+// Muốn giữ đăng nhập lâu hơn thì đổi thành localStorage.
+const SESSION_STORE = sessionStorage;
 // BẢN BACKEND: thường sẽ lưu 1 "token" thay vì lưu thẳng roleKey/name,
 // ví dụ localStorage.setItem('token', data.token) — xem gợi ý trong
 // AuthAPI.login()/getSession() bên dưới.
@@ -95,7 +98,8 @@ const AuthAPI = {
         );
         if (!acc) throw new Error('Sai tên đăng nhập hoặc mật khẩu.');
         const session = { roleKey: acc.roleKey, name: acc.name };
-        localStorage.setItem(AUTH_STORAGE_KEY, JSON.stringify(session));
+        // trước: localStorage.setItem(AUTH_STORAGE_KEY, JSON.stringify(session));
+        SESSION_STORE.setItem(AUTH_STORAGE_KEY, JSON.stringify(session));
         return session;
 
         // ---- BẢN BACKEND ----
@@ -113,7 +117,8 @@ const AuthAPI = {
     // Đăng xuất — được gọi từ nút "Đăng xuất" ở đáy sidebar (xem script.js)
     async logout() {
         // ---- BẢN DEMO ----
-        localStorage.removeItem(AUTH_STORAGE_KEY);
+        // trước: localStorage.removeItem(AUTH_STORAGE_KEY);
+        SESSION_STORE.removeItem(AUTH_STORAGE_KEY);
 
         // ---- BẢN BACKEND ----
         // try { await fetch('/api/auth/logout', { method: 'POST' }); } catch (err) {}
@@ -128,7 +133,8 @@ const AuthAPI = {
     getSession() {
         // ---- BẢN DEMO ----
         try {
-            const raw = localStorage.getItem(AUTH_STORAGE_KEY);
+            // trước: const raw = localStorage.getItem(AUTH_STORAGE_KEY);
+            const raw = SESSION_STORE.getItem(AUTH_STORAGE_KEY);
             return raw ? JSON.parse(raw) : null;
         } catch (err) {
             return null;
