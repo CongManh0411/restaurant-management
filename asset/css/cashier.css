@@ -1,0 +1,104 @@
+/* ============================================================
+   cashier.css — CSS riêng cho chức năng Thu ngân
+   (POS mang đi/giao hàng, thanh toán nâng cao, Đơn hàng, Ca & Quỹ, Nhật ký, Đăng ký ca)
+   Link SAU style.css. Modal .modal-overlay/.modal-box lấy từ history.css nên trang
+   nào dùng modal đó cũng cần link history.css.
+   ============================================================ */
+
+/* ---- Trang Bàn: đơn mang đi / giao hàng ---- */
+.togo-actions { margin-left: auto; display: flex; gap: 8px; align-items: center; padding-bottom: 6px; }
+.btn-togo {
+    font-family: "Poppins", sans-serif; font-size: 13px; font-weight: 600;
+    padding: 8px 14px; border-radius: 8px; cursor: pointer;
+    border: 1px solid #c99a5b; background: #c99a5b; color: #2a170c;
+}
+.btn-togo:hover { background: #b88848; }
+.table-card.togo { border-style: dashed; }
+.btn-note, .btn-soldout {
+    font-family: "Poppins", sans-serif; font-size: 12px; cursor: pointer;
+    background: transparent; border: none; color: #8a6b4f; padding: 2px 0; text-decoration: underline;
+}
+.btn-soldout { margin-left: 8px; }
+.soldout-tag { display: inline-block; padding: 4px 10px; border-radius: 12px; background: #fbe9e3; color: #b5573c; font-size: 12px; font-weight: 600; }
+
+/* ---- Popup thanh toán: khuyến mãi, tổng, hủy món đã làm, gửi hóa đơn ---- */
+.wp-disc { margin-top: 10px; padding: 10px; background: #fff; border: 1px solid #e6d8c3; border-radius: 10px; }
+.wp-disc-row { display: flex; gap: 8px; margin-bottom: 6px; }
+.wp-disc-row input, .wp-disc-row select, .wp-mail input {
+    flex: 1; min-width: 0; padding: 8px 10px; font-size: 14px; font-family: inherit;
+    border: 1px solid #c99a5b; border-radius: 8px; box-sizing: border-box;
+}
+.wp-disc-row select { flex: 0 0 60px; }
+.wp-disc-ok { color: #2c7046; font-weight: 600; font-size: 13px; margin-bottom: 4px; }
+.wp-disc-note { color: #8a6b4f; font-size: 11.5px; }
+.wp-mini {
+    padding: 8px 12px; font-family: inherit; font-size: 13px; font-weight: 600;
+    background: #f5e9d8; border: 1px solid #c99a5b; border-radius: 8px; cursor: pointer; color: #3b2313;
+}
+.wp-sum { margin-top: 10px; font-size: 14px; }
+.wp-sum > div { display: flex; justify-content: space-between; padding: 3px 2px; color: #6b5440; }
+.wp-void { color: #b5573c; border-color: #c96a5b; }
+.wp-mail { display: flex; gap: 8px; margin-top: 10px; }
+
+/* ---- Khối thẻ thống kê dùng chung (Ca & Quỹ, Đơn hàng, Nhật ký) ---- */
+.cs-wrap { max-width: 1100px; }
+.cs-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 12px; margin-bottom: 18px; }
+.cs-card { background: #fff; border: 1px solid #e6d8c3; border-radius: 12px; padding: 14px 16px; }
+.cs-card span { display: block; font-size: 12.5px; color: #8a6b4f; margin-bottom: 4px; }
+.cs-card b { font-size: 20px; color: #3b2313; }
+.cs-card small { display: block; color: #9a8672; font-size: 12px; margin-top: 2px; }
+.cs-card.ok b { color: #2c7046; }
+.cs-card.warn b { color: #b5573c; }
+.cs-panel { background: #fff; border: 1px solid #e6d8c3; border-radius: 12px; padding: 18px; margin-bottom: 18px; }
+.cs-panel h3 { margin: 0 0 12px; font-family: "Playfair Display", serif; color: #3b2313; font-size: 18px; }
+.cs-form { display: flex; flex-wrap: wrap; gap: 10px; align-items: flex-end; }
+.cs-form label { display: flex; flex-direction: column; gap: 4px; font-size: 12.5px; color: #8a6b4f; flex: 1 1 150px; }
+.cs-form input, .cs-form select, .cs-form textarea {
+    padding: 9px 10px; font-size: 14px; font-family: "Poppins", sans-serif;
+    border: 1px solid #d6c3a5; border-radius: 8px; box-sizing: border-box; background: #fffdf9;
+}
+.cs-btn {
+    font-family: "Poppins", sans-serif; font-size: 14px; font-weight: 600;
+    padding: 10px 18px; border-radius: 8px; cursor: pointer;
+    border: 1px solid #c99a5b; background: #c99a5b; color: #2a170c;
+}
+.cs-btn:hover { background: #b88848; }
+.cs-btn.line { background: transparent; color: #7a5c3e; }
+.cs-btn.line:hover { background: #f1e6d3; }
+.cs-btn.danger { background: #c96a5b; border-color: #c96a5b; color: #fff; }
+.cs-btn:disabled { opacity: .5; cursor: not-allowed; }
+.cs-msg { margin: 8px 0 0; font-size: 13px; color: #b5573c; font-weight: 600; }
+.cs-msg.ok { color: #2c7046; }
+.cs-note { color: #9a8672; font-size: 12.5px; margin: 6px 0 0; }
+.cs-diff { font-weight: 600; font-size: 15px; margin-top: 8px; }
+.cs-diff.ok { color: #2c7046; }
+.cs-diff.bad { color: #b5573c; }
+.cs-status { display: inline-block; padding: 4px 10px; border-radius: 12px; font-size: 12px; font-weight: 600; }
+.cs-status.waiting { background: #eee4d2; color: #8a6b4f; }
+.cs-status.making { background: #fdeccf; color: #a65a0c; }
+.cs-status.done { background: #e7f2e6; color: #4a7a4e; }
+.cs-type { display: inline-block; padding: 2px 8px; border-radius: 10px; background: #f1e6d3; color: #7a5c3e; font-size: 11.5px; font-weight: 600; }
+.cs-flag { display: inline-block; padding: 2px 8px; border-radius: 10px; background: #fbe9e3; color: #b5573c; font-size: 11.5px; font-weight: 600; margin-left: 6px; }
+.cs-actions { display: flex; gap: 6px; flex-wrap: wrap; }
+.cs-report { max-width: 420px; margin: 0 auto; }
+.cs-ro-hide { display: none; }
+
+/* ---- Đăng ký ca (Schedule.html, Thu ngân) ---- */
+.reg-panel { margin: 0 24px 18px; }
+.reg-days { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 10px; }
+.reg-day { border: 1px solid #e6d8c3; border-radius: 10px; padding: 10px 12px; background: #fffdf9; }
+.reg-day.today { border-color: #c99a5b; }
+.reg-day-h { font-weight: 600; color: #3b2313; font-size: 13.5px; margin-bottom: 6px; }
+.reg-slot { display: flex; align-items: center; gap: 8px; padding: 5px 0; font-size: 13px; color: #3b2313; }
+.reg-slot.locked { color: #9a8672; }
+.reg-slot small { color: #9a8672; }
+.reg-slot input { width: 16px; height: 16px; accent-color: #c99a5b; }
+
+@media (max-width: 768px) {
+    .togo-actions { width: 100%; margin-left: 0; flex-wrap: wrap; }
+    .cs-panel { padding: 14px; }
+    .reg-panel { margin: 0 12px 14px; }
+}
+@media print {
+    .sidebar, .mobile-topbar, .cs-noprint { display: none !important; }
+}

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="asset/css/style.css">
+    <link rel="stylesheet" href="asset/css/history.css">
+    <link rel="stylesheet" href="asset/css/notifications.css">
+    <link rel="stylesheet" href="asset/css/cashier.css">
+    <title>Đơn hàng</title>
+</head>
+<body data-page="orders">
+    <div id="sidebar-container"></div>
+
+    <main class="main">
+        <nav class="topnav" id="ordTabs">
+            <button class="topnav-item active" data-tab="processing">Đang xử lý</button>
+            <button class="topnav-item" data-tab="done">Đã hoàn thành</button>
+            <button class="topnav-item" data-tab="cancelled">Đã hủy / hoàn tiền</button>
+        </nav>
+
+        <div class="main-content cs-wrap">
+            <div class="menu-page-header">
+                <h2 id="ordTitle">Đơn đang xử lý</h2>
+                <p id="ordSub">—</p>
+            </div>
+            <div class="data-table-wrapper">
+                <table class="data-table">
+                    <thead id="ordHead"></thead>
+                    <tbody id="ordBody"></tbody>
+                </table>
+            </div>
+            <p class="cs-note" id="ordNote"></p>
+        </div>
+    </main>
+
+    <script src="asset/js/auth.js"></script>
+    <script src="asset/js/portable-shim.js"></script>
+    <script src="asset/js/common.js"></script>
+    <script src="asset/js/cashier-core.js"></script>
+    <script src="asset/js/waiter-pay.js"></script>
+    <script src="asset/js/notifications.js"></script>
+    <script src="asset/js/orders.js"></script>
+</body>
+</html>

@@ -1,0 +1,57 @@
+/* ============================================================
+   revenue.css — CSS RIÊNG cho Revenue.html
+   Tách từ asset/css/style.css để dễ quản lý. (.stat-card, .data-table dùng chung nằm trong style.css)
+   File này cần link SAU asset/css/style.css.
+   ============================================================ */
+
+
+
+/* ---- Doanh thu theo phương thức thanh toán ---- */
+.payment-breakdown {
+    background: #fff;
+    border: 1px solid #ece2d3;
+    border-radius: 14px;
+    padding: 20px 22px;
+    margin-bottom: 28px;
+}
+.payment-breakdown h3 {
+    font-family: "Poppins", sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    color: #4a2a18;
+    margin: 0 0 16px;
+}
+.payment-bar-row + .payment-bar-row {
+    margin-top: 14px;
+}
+.payment-bar-head {
+    display: flex;
+    justify-content: space-between;
+    font-size: 13px;
+    color: #5a3d28;
+    margin-bottom: 6px;
+}
+.payment-bar-head .amount {
+    color: #9a8672;
+    font-weight: 500;
+}
+.payment-bar-track {
+    height: 8px;
+    background: #f0e6d6;
+    border-radius: 6px;
+    overflow: hidden;
+}
+.payment-bar-fill {
+    height: 100%;
+    border-radius: 6px;
+    transition: width 0.3s ease;
+}
+.payment-bar-fill.cash {
+    background: #c99a5b;
+}
+.payment-bar-fill.transfer {
+    background: #7a9e7e;
+}
+.payment-bar-fill.card {
+    background: #7a8ca8;
+}

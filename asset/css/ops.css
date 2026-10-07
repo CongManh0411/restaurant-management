@@ -1,0 +1,14 @@
+.ops-card { background: #fff; border: 1px solid #e3d6c6; border-radius: 14px; padding: 16px; margin-bottom: 16px; }
+.ops-card h3 { margin: 0 0 12px; color: #6b4f3a; }
+.ops-form { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; }
+.ops-form input, .ops-form select { padding: 8px 10px; border: 1.5px solid #d9c9b6; border-radius: 10px; font: inherit; min-width: 120px; }
+.ops-form button, .ops-btn { padding: 8px 14px; border: 0; border-radius: 10px; background: #6b4f3a; color: #fff; font: inherit; cursor: pointer; }
+.ops-btn.sm { padding: 4px 10px; font-size: 12px; margin-left: 4px; }
+.ops-btn.red { background: #b0412e; } .ops-btn.green { background: #3f8a5a; }
+.ops-table { width: 100%; border-collapse: collapse; font-size: 14px; }
+.ops-table th { text-align: left; background: #6b4f3a; color: #fff; padding: 8px; }
+.ops-table td { padding: 8px; border-bottom: 1px solid #eee3d5; }
+.ops-warn { color: #b0412e; font-weight: 600; }
+.ops-tag { display: inline-block; padding: 2px 10px; border-radius: 999px; background: #f0e6d8; font-size: 12px; }
+.ops-empty { color: #9a8672; padding: 12px; }
+.ops-scroll { overflow-x: auto; }

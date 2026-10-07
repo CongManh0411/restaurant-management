@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="asset/css/style.css">
+    <link rel="stylesheet" href="asset/css/history.css">
+    <link rel="stylesheet" href="asset/css/cashier.css">
+    <title>Nhật ký</title>
+</head>
+<body data-page="logs">
+    <div id="sidebar-container"></div>
+
+    <main class="main">
+        <nav class="topnav" id="lgTabs">
+            <button class="topnav-item active" data-tab="logs">Nhật ký thao tác</button>
+            <button class="topnav-item" data-tab="shifts">Báo cáo kết ca</button>
+        </nav>
+        <div class="main-content cs-wrap">
+            <div class="menu-page-header">
+                <h2 id="lgTitle">Nhật ký thao tác</h2>
+                <p id="lgSub">—</p>
+            </div>
+
+            <div class="cs-form" id="lgFilters" style="margin-bottom:14px">
+                <label>Loại thao tác<select id="fType"><option value="">Tất cả</option></select></label>
+                <label>Thời gian<select id="fRange"><option value="1">Hôm nay</option><option value="7">7 ngày</option><option value="30">30 ngày</option><option value="0">Tất cả</option></select></label>
+                <label>Người thực hiện<select id="fWho"><option value="">Tất cả</option></select></label>
+                <label style="flex:0 0 auto;flex-direction:row;align-items:center;gap:6px"><input type="checkbox" id="fFlag"> Chỉ mục cần chú ý</label>
+            </div>
+
+            <div class="data-table-wrapper">
+                <table class="data-table">
+                    <thead id="lgHead"></thead>
+                    <tbody id="lgBody"></tbody>
+                </table>
+            </div>
+            <p class="cs-note" id="lgNote"></p>
+        </div>
+    </main>
+
+    <div id="lgModal" class="modal-overlay">
+        <div class="modal-box" style="max-width:460px">
+            <div id="lgReport" class="cs-report"></div>
+            <div class="modal-actions" style="margin-top:16px">
+                <button class="btn-outline" style="flex:1" id="lgClose">Đóng</button>
+                <button class="btn-outline" style="flex:1" id="lgPrint">In</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="asset/js/auth.js"></script>
+    <script src="asset/js/portable-shim.js"></script>
+    <script src="asset/js/common.js"></script>
+    <script src="asset/js/cashier-core.js"></script>
+    <script src="asset/js/logs.js"></script>
+</body>
+</html>

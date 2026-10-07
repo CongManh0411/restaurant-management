@@ -1,0 +1,674 @@
+/* ============================================================
+   style.css — CSS DÙNG CHUNG cho toàn bộ hệ thống
+   (sidebar, khung trang, nút/badge/form/bảng dùng chung nhiều trang)
+   CSS riêng từng trang đã được tách sang: menu.css, revenue.css,
+   history.css, pay.css, login.css, staff.css, warehouse.css,
+   table-order.css (Table.html & TableManage.html), order.css.
+   ============================================================ */
+
+html, body {
+    height: 100%;
+    margin: 0;
+    overflow: hidden;
+}
+
+body {
+    display: flex;
+}
+ 
+.sidebar {
+    width: 240px;
+    height: 100vh;
+    overflow: hidden; /* không cuộn — mọi khoảng cách bên dưới tự co theo chiều cao màn hình */
+    background: linear-gradient(180deg, #4a2a18 0%, #351d10 100%);
+    padding: clamp(14px, 4vh, 28px) 18px;
+    display: flex;
+    flex-direction: column;
+    gap: clamp(10px, 2.2vh, 22px);
+    font-family: "Poppins", sans-serif;
+    box-sizing: border-box;
+}
+ 
+/* ---- Logo ---- */
+.sidebar-shop {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 4px;
+}
+.shop-logo {
+    width: clamp(64px, 13vh, 110px);
+    height: clamp(64px, 13vh, 110px);
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid #c99a5b;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
+}
+ 
+/* ---- User + chức vụ ---- */
+.sidebar-user {
+    text-align: center;
+    padding-bottom: 8px;
+    border-bottom: 1px solid rgba(201, 154, 91, 0.25);
+}
+.user-name {
+    font-family: "Playfair Display", serif;
+    font-weight: 700;
+    font-size: 18px;
+    color: #f5e9d8;
+}
+.user-role {
+    font-size: 13px;
+    color: #c99a5b;
+    margin-top: 2px;
+    letter-spacing: 0.3px;
+}
+ 
+/* ---- Menu ---- */
+.sidebar-nav {
+    display: flex;
+    flex-direction: column;
+}
+ 
+.sidebar-menu {
+    display: flex;
+    flex-direction: column;
+    gap: clamp(6px, 1.4vh, 10px);
+}
+ 
+.sidebar-menu .tab {
+    display: block;
+    color: #e8d9c5;
+    font-family: "Poppins", sans-serif;
+    font-weight: 500;
+    font-size: 14px;
+    padding: clamp(8px, 1.6vh, 12px) 16px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(201, 154, 91, 0.25);
+    border-radius: 10px;
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+    box-sizing: border-box;
+    transition: background 0.2s ease, border-color 0.2s ease, transform 0.15s ease;
+}
+
+.sidebar-menu .tab:hover {
+    background: #f5e9d8;
+    border-color: #f5e9d8;
+    color: #3b2313;
+}
+
+/* Nút đang được chọn — nổi bật bằng nền vàng cà phê + chữ đậm màu nền */
+.sidebar-menu .tab.active {
+    background: #c99a5b;
+    border-color: #c99a5b;
+    color: #2a170c;
+    font-weight: 600;
+}
+ 
+/* ---- Main content ---- */
+.main {
+    flex: 1;
+    background: #f7f2ea;
+    height: 100vh;
+    overflow-y: auto;
+}
+ 
+/* Thanh điều hướng ngang */
+.topnav {
+    display: flex;
+    gap: 4px;
+    padding: 16px 24px 0;
+    border-bottom: 2px solid #e0d3bd;
+}
+ 
+.topnav-item {
+    font-family: "Poppins", sans-serif;
+    font-weight: 500;
+    font-size: 14px;
+    color: #7a5c3e;
+    background: transparent;
+    border: none;
+    padding: 12px 20px;
+    cursor: pointer;
+    border-bottom: 3px solid transparent;
+    transition: color 0.2s ease, border-color 0.2s ease;
+}
+ 
+.topnav-item:hover {
+    color: #4a2a18;
+    border-bottom-color: #c99a5b;
+}
+ 
+/* Tab đang được chọn — gạch chân vàng cà phê */
+.topnav-item.active {
+    color: #4a2a18;
+    font-weight: 600;
+    border-bottom-color: #c99a5b;
+}
+ 
+.main-content {
+    padding: 24px;
+}
+ 
+
+/* ---- Header trang Menu ---- */
+.menu-page-header h2 {
+    font-family: "Playfair Display", serif;
+    color: #3b2313;
+    font-size: 24px;
+    margin: 0 0 4px;
+}
+.menu-page-header p {
+    color: #9a8672;
+    font-size: 14px;
+    margin: 0 0 28px;
+}
+ 
+
+.btn-outline,
+.btn-danger {
+    font-family: "Poppins", sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    padding: 7px 14px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.2s ease, color 0.2s ease;
+}
+.btn-outline {
+    background: transparent;
+    border: 1px solid #c99a5b;
+    color: #7a5c3e;
+}
+.btn-outline:hover {
+    background: #c99a5b;
+    color: #2a170c;
+}
+.btn-danger {
+    background: transparent;
+    border: 1px solid #c96a5b;
+    color: #b5573c;
+}
+.btn-danger:hover {
+    background: #c96a5b;
+    color: #fff;
+}
+ 
+
+/* ---- Form Thêm món ---- */
+.add-item-form {
+    max-width: 640px;
+}
+ 
+.form-row {
+    display: flex;
+    gap: 24px;
+}
+.form-row .form-group {
+    flex: 1;
+}
+ 
+.form-group {
+    margin-bottom: 18px;
+}
+ 
+.form-group label {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    color: #9a8672;
+    margin-bottom: 6px;
+}
+ 
+.form-group input,
+.form-group select {
+    width: 100%;
+    box-sizing: border-box;
+    font-family: "Poppins", sans-serif;
+    font-size: 14px;
+    color: #3b2313;
+    padding: 10px 12px;
+    border: 1px solid #e0d3bd;
+    border-radius: 8px;
+    background: #fff;
+}
+ 
+.form-group input::placeholder {
+    color: #c4b8a5;
+}
+ 
+.form-group input:focus,
+.form-group select:focus {
+    outline: none;
+    border-color: #c99a5b;
+}
+ 
+.btn-submit {
+    width: 100%;
+    font-family: "Poppins", sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    color: #fff;
+    background: #3b2313;
+    border: none;
+    padding: 14px;
+    border-radius: 8px;
+    cursor: pointer;
+    margin-top: 8px;
+    transition: background 0.2s ease;
+}
+.btn-submit:hover {
+    background: #4a2a18;
+}
+.btn-outline:disabled,
+.btn-danger:disabled,
+.btn-submit:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+.btn-outline:disabled:hover,
+.btn-danger:disabled:hover {
+    background: transparent;
+    color: inherit;
+}
+
+/* Ẩn khỏi màn hình nhưng vẫn đọc được bằng screen reader (dùng cho <label> của ô tìm kiếm) */
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+/* ---- Thanh lọc kỳ / trạng thái + ô tìm kiếm (đặt trên .topnav) ---- */
+.period-filter-bar {
+    align-items: center;
+    flex-wrap: wrap;
+    row-gap: 10px;
+}
+.date-range-inputs {
+    display: none;
+    align-items: center;
+    gap: 8px;
+    padding-bottom: 12px;
+}
+.date-range-inputs.active {
+    display: flex;
+}
+.date-range-inputs input[type="date"] {
+    font-family: "Poppins", sans-serif;
+    font-size: 13px;
+    color: #3b2313;
+    padding: 8px 10px;
+    border: 1px solid #e0d3bd;
+    border-radius: 8px;
+    background: #fff;
+}
+.date-range-inputs input[type="date"]:focus {
+    outline: none;
+    border-color: #c99a5b;
+}
+.date-range-inputs span {
+    color: #b3a48f;
+    font-size: 13px;
+}
+
+/* ---- Thẻ số liệu tổng quan — dùng chung Revenue.html & Warehouse.html ---- */
+/* ---- Thẻ số liệu tổng quan (Revenue.html) ---- */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-bottom: 28px;
+}
+.stat-card {
+    background: #fff;
+    border: 1px solid #ece2d3;
+    border-radius: 14px;
+    padding: 18px 20px;
+}
+.stat-card-label {
+    font-size: 12.5px;
+    color: #9a8672;
+    margin-bottom: 8px;
+}
+.stat-card-value {
+    font-family: "Playfair Display", serif;
+    font-weight: 700;
+    font-size: 22px;
+    color: #3b2313;
+}
+.stat-card.highlight {
+    background: linear-gradient(135deg, #4a2a18 0%, #351d10 100%);
+    border-color: transparent;
+}
+.stat-card.highlight .stat-card-label {
+    color: #d8c2a5;
+}
+.stat-card.highlight .stat-card-value {
+    color: #f5e9d8;
+}
+.stat-card.cancelled-note {
+    background: #fbf1e8;
+    border-color: #e6d4b8;
+}
+.stat-card.cancelled-note .stat-card-value {
+    color: #b5573c;
+    font-size: 16px;
+}
+
+/* ---- Bảng dữ liệu dùng chung (Doanh thu theo ngày / Hóa đơn) ---- */
+.data-table-wrapper {
+    background: #fff;
+    border: 1px solid #ece2d3;
+    border-radius: 14px;
+    overflow: auto;
+    margin-bottom: 16px;
+}
+.data-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: "Poppins", sans-serif;
+    font-size: 13.5px;
+}
+.data-table thead th {
+    text-align: left;
+    font-size: 12px;
+    font-weight: 600;
+    color: #9a8672;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    padding: 14px 16px;
+    border-bottom: 2px solid #ece2d3;
+    white-space: nowrap;
+}
+.data-table tbody td {
+    padding: 12px 16px;
+    color: #3b2313;
+    border-bottom: 1px solid #f2ebe0;
+    vertical-align: top;
+}
+.data-table tbody tr:last-child td {
+    border-bottom: none;
+}
+.data-table tbody tr:hover {
+    background: #fbf6ee;
+}
+.empty-table-state {
+    text-align: center;
+    padding: 50px 20px;
+    color: #b3a48f;
+    font-size: 14px;
+}
+
+/* ---- Nhãn trạng thái / phương thức thanh toán (badge) ---- */
+.badge {
+    display: inline-block;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 4px 10px;
+    border-radius: 12px;
+    white-space: nowrap;
+}
+.badge-active {
+    background: #e7f2e6;
+    color: #4a7a4e;
+}
+.badge-cancelled {
+    background: #fbe9e3;
+    color: #b5573c;
+}
+.badge-cash {
+    background: #f5ead4;
+    color: #8a6a2f;
+}
+.badge-transfer {
+    background: #e3ede3;
+    color: #4a7a4e;
+}
+.badge-card {
+    background: #e4e8f0;
+    color: #45507a;
+}
+.cancel-reason-note {
+    margin-top: 4px;
+    font-size: 12px;
+    color: #b5573c;
+}
+
+/* ---- Ghi chú đồng bộ dưới bảng ---- */
+.sync-hint {
+    font-size: 12.5px;
+    color: #b3a48f;
+    text-align: center;
+    margin-top: 4px;
+}
+
+/* ---- Responsive: máy tính bảng / điện thoại ---- */
+@media (max-width: 1024px) {
+    .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+@media (max-width: 768px) {
+    .period-filter-bar {
+        overflow-x: auto;
+        flex-wrap: nowrap;
+    }
+    .date-range-inputs {
+        flex-wrap: wrap;
+    }
+    .stats-grid {
+        grid-template-columns: 1fr;
+    }
+    .data-table {
+        font-size: 12.5px;
+    }
+    .data-table thead th,
+    .data-table tbody td {
+        padding: 10px 12px;
+    }
+}
+
+/* Nút Hủy khi đang sửa món */
+.btn-cancel-edit {
+    width: 100%;
+    font-family: "Poppins", sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    color: #7a5c3e;
+    background: transparent;
+    border: 1px solid #e0d3bd;
+    padding: 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    margin-top: 8px;
+    transition: background 0.2s ease, border-color 0.2s ease;
+}
+.btn-cancel-edit:hover {
+    background: #f7f2ea;
+    border-color: #c99a5b;
+}
+
+/* ---- Đăng xuất (đáy sidebar) ---- */
+.sidebar-footer {
+    margin-top: auto; /* bám đáy sidebar khi còn khoảng trống thừa */
+    flex-shrink: 0;
+    padding-top: clamp(8px, 1.6vh, 16px);
+    border-top: 1px solid rgba(201, 154, 91, 0.25);
+}
+
+.btn-logout {
+    width: 100%;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-family: "Poppins", sans-serif;
+    font-weight: 500;
+    font-size: 14px;
+    color: #f0b8ab;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(197, 90, 74, 0.35);
+    border-radius: 10px;
+    padding: 12px 16px;
+    cursor: pointer;
+    transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+}
+.btn-logout:hover {
+    background: #c96a5b;
+    border-color: #c96a5b;
+    color: #fff;
+}
+.btn-logout i {
+    font-size: 16px;
+    line-height: 1;
+}
+
+/* ---- Thanh topbar mobile (chỉ hiện khi thu gọn sidebar) ----
+   Được chèn vào đầu <main> bằng script.js, ẩn mặc định trên desktop. */
+.mobile-topbar {
+    display: none;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 16px;
+    background: linear-gradient(180deg, #4a2a18 0%, #351d10 100%);
+    position: sticky;
+    top: 0;
+    z-index: 30;
+    box-sizing: border-box;
+}
+.sidebar-toggle-btn {
+    width: 38px;
+    height: 38px;
+    flex-shrink: 0;
+    border-radius: 8px;
+    border: 1px solid rgba(201, 154, 91, 0.35);
+    background: rgba(255, 255, 255, 0.06);
+    color: #f5e9d8;
+    font-size: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background 0.2s ease, color 0.2s ease;
+}
+.sidebar-toggle-btn:hover {
+    background: #c99a5b;
+    color: #2a170c;
+}
+.mobile-topbar-title {
+    font-family: "Playfair Display", serif;
+    font-weight: 700;
+    color: #f5e9d8;
+    font-size: 16px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* ---- Lớp phủ tối phía sau sidebar khi mở trên mobile ---- */
+.sidebar-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.45);
+    z-index: 40;
+}
+.sidebar-overlay.active {
+    display: block;
+}
+
+/* ---- Máy tính bảng: sidebar hẹp lại, vẫn cố định như desktop ---- */
+@media (max-width: 1024px) and (min-width: 769px) {
+    .sidebar {
+        width: 200px;
+        padding-left: 14px;
+        padding-right: 14px;
+    }
+    .main-content {
+        padding: 20px;
+    }
+}
+
+/* ---- Điện thoại / màn hình hẹp: sidebar thành drawer trượt (phần dùng chung) ---- */
+@media (max-width: 768px) {
+    body {
+        overflow: hidden; /* main tự cuộn bên trong, giữ cảm giác app */
+    }
+
+    .mobile-topbar {
+        display: flex;
+    }
+
+    .sidebar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 80vw;
+        max-width: 300px;
+        height: 100vh;
+        z-index: 50;
+        transform: translateX(-100%);
+        transition: transform 0.25s ease;
+        box-shadow: 4px 0 24px rgba(0, 0, 0, 0.35);
+    }
+    .sidebar.open {
+        transform: translateX(0);
+    }
+
+    .main {
+        width: 100%;
+    }
+
+    .main-content {
+        padding: 16px;
+    }
+
+    .menu-page-header h2 {
+        font-size: 20px;
+    }
+    .menu-page-header p {
+        margin-bottom: 20px;
+    }
+
+    .topnav {
+        padding: 12px 16px 0;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        flex-wrap: nowrap;
+    }
+    .topnav-item {
+        padding: 10px 14px;
+        white-space: nowrap;
+        flex-shrink: 0;
+    }
+}
+
+@media (max-width: 400px) {
+    .sidebar {
+        width: 85vw;
+    }
+    .mobile-topbar-title {
+        font-size: 14px;
+    }
+}
+
+/* ---- Nút trong bảng ---- */
+.data-table .table-actions {
+    display: flex;
+    gap: 8px;
+}
+/* ---- Sửa: nút Đăng xuất luôn thấy được ----
+   Menu dài (nhiều mục) không được đẩy nút Đăng xuất ra ngoài màn hình:
+   phần menu tự cuộn, phần Đăng xuất luôn ghim ở đáy sidebar. */
+.sidebar-nav { flex: 1 1 auto; min-height: 0; overflow-y: auto; overscroll-behavior: contain; scrollbar-width: thin; scrollbar-color: rgba(201,154,91,.5) transparent; }
+.sidebar-footer { flex: 0 0 auto; }
+@media (max-height: 760px) { .shop-logo { width: 56px; height: 56px; } .sidebar-shop { margin-bottom: 0; } }

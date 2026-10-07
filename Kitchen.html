@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="asset/css/style.css">
+    <link rel="stylesheet" href="asset/css/kitchen.css">
+    <title>Bếp</title>
+</head>
+<body data-page="kitchen">
+    <div id="sidebar-container"></div>
+
+    <main class="main">
+        <div class="main-content">
+            <div class="menu-page-header">
+                <h2>Bếp</h2>
+                <p id="kSummary">Chưa có món nào.</p>
+            </div>
+
+            <div class="k-board">
+                <section class="k-col k-waiting" aria-labelledby="kTitleWaiting">
+                    <h3 id="kTitleWaiting">Chờ làm <span class="k-count" id="kCountWaiting">0</span></h3>
+                    <div class="k-list" id="kListWaiting"></div>
+                </section>
+                <section class="k-col k-making" aria-labelledby="kTitleMaking">
+                    <h3 id="kTitleMaking">Đang làm <span class="k-count" id="kCountMaking">0</span></h3>
+                    <div class="k-list" id="kListMaking"></div>
+                </section>
+                <section class="k-col k-done" aria-labelledby="kTitleDone">
+                    <h3 id="kTitleDone">Đã xong <span class="k-count" id="kCountDone">0</span></h3>
+                    <div class="k-list" id="kListDone"></div>
+                </section>
+            </div>
+
+            <p class="sync-hint">Các món gửi cùng lúc của một bàn được gom thành một phiếu. Phiếu chuyển sang vàng sau 3 phút và đỏ sau 5 phút chưa xong. Bấm "Xong" là Phục vụ nhận thông báo ngay. Cột Đã xong chỉ giữ 30 phút gần nhất.</p>
+        </div>
+    </main>
+
+    <script src="asset/js/auth.js"></script>
+    <script src="asset/js/portable-shim.js"></script>
+    <script src="asset/js/common.js"></script>
+    <script src="asset/js/kitchen.js"></script>
+</body>
+</html>

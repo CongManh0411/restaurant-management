@@ -1,0 +1,171 @@
+/* ============================================================
+   login.css — CSS RIÊNG cho Login.html
+   Tách từ asset/css/style.css để dễ quản lý.
+   File này cần link SAU asset/css/style.css.
+   ============================================================ */
+
+
+
+body.login-page {
+    height: 100%;
+    overflow: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    padding: 24px;
+    box-sizing: border-box;
+    background: radial-gradient(circle at top, #5a3420 0%, #2c1810 70%);
+    font-family: "Poppins", sans-serif;
+}
+
+.login-card {
+    width: 100%;
+    max-width: 380px;
+    background: #fffaf3;
+    border-radius: 20px;
+    padding: 32px 28px 28px;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35);
+    text-align: center;
+    box-sizing: border-box;
+}
+
+.login-logo {
+    font-size: 40px;
+    margin-bottom: 6px;
+}
+
+.login-title {
+    font-family: "Playfair Display", serif;
+    font-weight: 700;
+    font-size: 26px;
+    color: #4a2a18;
+    margin: 0 0 4px;
+}
+
+.login-sub {
+    font-size: 13px;
+    color: #8a6a55;
+    margin: 0 0 22px;
+}
+
+.login-form {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    text-align: left;
+}
+
+.login-field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #5a3d28;
+}
+
+.login-field input {
+    font-family: "Poppins", sans-serif;
+    font-size: 14px;
+    padding: 11px 13px;
+    border: 1px solid #e0d3bd;
+    border-radius: 10px;
+    background: #fff;
+    color: #3a2415;
+    outline: none;
+    transition: border-color 0.15s ease;
+    box-sizing: border-box;
+    width: 100%;
+}
+.login-field input:focus {
+    border-color: #c99a5b;
+}
+
+.login-pass {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+.login-pass input { padding-right: 56px; }
+
+.login-eye {
+    position: absolute;
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    border: none;
+    background: none;
+    color: #8a6a55;
+    font-size: 12px;
+    font-weight: 600;
+    font-family: "Poppins", sans-serif;
+    cursor: pointer;
+    padding: 6px 8px;
+}
+.login-eye:hover { color: #4a2a18; }
+
+.login-error {
+    background: #fbe7e2;
+    color: #a5432f;
+    border: 1px solid #e6b3a3;
+    border-radius: 8px;
+    padding: 9px 12px;
+    font-size: 12.5px;
+    margin: 0;
+}
+
+.login-btn {
+    margin-top: 4px;
+    padding: 12px;
+    border: none;
+    border-radius: 10px;
+    background: linear-gradient(180deg, #c99a5b 0%, #b3813f 100%);
+    color: #fff;
+    font-family: "Poppins", sans-serif;
+    font-weight: 600;
+    font-size: 14.5px;
+    cursor: pointer;
+    transition: filter 0.15s ease, transform 0.05s ease;
+}
+.login-btn:hover { filter: brightness(1.05); }
+.login-btn:active { transform: translateY(1px); }
+.login-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+
+.login-forgot {
+    text-align: center;
+    font-size: 12.5px;
+    color: #8a6a55;
+    text-decoration: none;
+    margin-top: 2px;
+}
+.login-forgot:hover { text-decoration: underline; }
+
+.login-demo {
+    margin-top: 22px;
+    padding-top: 16px;
+    border-top: 1px dashed #e0d3bd;
+    text-align: left;
+    font-size: 12px;
+    color: #7a5c3e;
+}
+.login-demo strong {
+    display: block;
+    margin-bottom: 6px;
+    color: #4a2a18;
+    font-size: 12.5px;
+}
+.login-demo ul {
+    margin: 0;
+    padding-left: 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+.login-copy {
+    font-size: 11.5px;
+    color: #cbb392;
+    text-align: center;
+}

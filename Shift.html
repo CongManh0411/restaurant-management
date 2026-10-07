@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="asset/css/style.css">
+    <link rel="stylesheet" href="asset/css/history.css">
+    <link rel="stylesheet" href="asset/css/notifications.css">
+    <link rel="stylesheet" href="asset/css/cashier.css">
+    <title>Ca & Quỹ</title>
+</head>
+<body data-page="cashshift">
+    <div id="sidebar-container"></div>
+
+    <main class="main">
+        <div class="main-content cs-wrap">
+            <div class="menu-page-header">
+                <h2>Ca & Quỹ tiền mặt</h2>
+                <p id="shSub">—</p>
+            </div>
+            <div id="shRoot"></div>
+        </div>
+    </main>
+
+    <!-- Báo cáo kết ca -->
+    <div id="shModal" class="modal-overlay">
+        <div class="modal-box" style="max-width:460px">
+            <div id="shReport" class="cs-report"></div>
+            <div class="modal-actions" style="margin-top:16px">
+                <button class="btn-outline" style="flex:1" id="shClose">Đóng</button>
+                <button class="btn-outline" style="flex:1" id="shPrint"><i class="fa-solid fa-print"></i> In báo cáo</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="asset/js/auth.js"></script>
+    <script src="asset/js/portable-shim.js"></script>
+    <script src="asset/js/common.js"></script>
+    <script src="asset/js/cashier-core.js"></script>
+    <script src="asset/js/waiter-pay.js"></script>
+    <script src="asset/js/notifications.js"></script>
+    <script src="asset/js/shift.js"></script>
+</body>
+</html>
